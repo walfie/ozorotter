@@ -1,0 +1,18 @@
+---
+image:
+  width: 640
+  height: 480
+  font: font/your-font-here.ttf
+
+  font_size: 42
+  margin: 5
+  stroke_width: 4.5
+  interline_spacing: -5
+  icon_size: 75
+
+twitter:
+  api:
+    consumer_key:        put
+    consumer_secret:     your
+    access_token:        keys
+    access_token_secret: here
