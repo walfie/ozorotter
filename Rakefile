@@ -1,4 +1,4 @@
-require_relative 'ozorotter'
+require_relative 'lib/ozorotter'
 require 'active_support/core_ext/time'
 
 task :test do

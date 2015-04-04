@@ -2,16 +2,10 @@
 
 require 'mini_magick'
 require 'yaml'
+require_relative 'ozorotter/weather'
 
 module Ozorotter
   @config ||= YAML.load_file 'config.yml'
-
-  Weather = Struct.new :time, :location, :description, :celsius do
-    def fahrenheit
-      celsius * 9/5 + 32
-    end
-  end
-
 
   module_function
 
@@ -68,30 +62,28 @@ module Ozorotter
   end
 end
 
-module MiniMagick
-  class Image
-    # Copied from CarrierWave
-    def resize_to_fill width, height, gravity='Center'
-      cols, rows = self[:dimensions]
-      self.combine_options do |cmd|
-        if width != cols || height != rows
-          scale_x = width/cols.to_f
-          scale_y = height/rows.to_f
-          if scale_x >= scale_y
-            cols = (scale_x * (cols + 0.5)).round
-            rows = (scale_x * (rows + 0.5)).round
-            cmd.resize "#{cols}"
-          else
-            cols = (scale_y * (cols + 0.5)).round
-            rows = (scale_y * (rows + 0.5)).round
-            cmd.resize "x#{rows}"
-          end
+class MiniMagick::Image
+  # Copied from CarrierWave
+  def resize_to_fill width, height, gravity='Center'
+    cols, rows = self[:dimensions]
+    self.combine_options do |cmd|
+      if width != cols || height != rows
+        scale_x = width/cols.to_f
+        scale_y = height/rows.to_f
+        if scale_x >= scale_y
+          cols = (scale_x * (cols + 0.5)).round
+          rows = (scale_x * (rows + 0.5)).round
+          cmd.resize "#{cols}"
+        else
+          cols = (scale_y * (cols + 0.5)).round
+          rows = (scale_y * (rows + 0.5)).round
+          cmd.resize "x#{rows}"
         end
-
-        cmd.gravity gravity
-        cmd.background "rgba(255,255,255,0.0)"
-        cmd.extent "#{width}x#{height}" if cols != width || rows != height
       end
+
+      cmd.gravity gravity
+      cmd.background "rgba(255,255,255,0.0)"
+      cmd.extent "#{width}x#{height}" if cols != width || rows != height
     end
   end
 end
