@@ -3,14 +3,16 @@
 require 'mini_magick'
 require 'yaml'
 require_relative 'ozorotter/weather'
+require_relative 'ozorotter/weather_api'
 require_relative 'mini_magick/image'
 
 module Ozorotter
+  # TODO: Better config management (not hardcoded filename)
   @config ||= YAML.load_file 'config.yml'
 
   module_function
 
-  def make_image weather, overlay_path, background_url, icon_url
+  def make_image weather, overlay_path, background_url
     opts = @config['image']
     w, h = opts['width'], opts['height']
     font_size = opts['font_size']
@@ -21,7 +23,7 @@ module Ozorotter
 
     background = MiniMagick::Image.open(background_url).resize_to_fill w, h
     overlay = MiniMagick::Image.open overlay_path
-    icon = MiniMagick::Image.open icon_url
+    icon = MiniMagick::Image.open weather.icon
 
     img = background.composite(overlay).combine_options do |c|
       c.font 'font/rounded-mplus-1c-bold.ttf'
