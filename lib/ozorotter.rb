@@ -25,7 +25,11 @@ module Ozorotter
     overlay = MiniMagick::Image.open overlay_path
     icon = MiniMagick::Image.open weather.icon
 
-    img = background.composite(overlay).combine_options do |c|
+    img = background.composite icon do |c|
+      c.geometry "#{opts['icon_size']}x+#{2*margin}+#{2*margin}"
+    end
+
+    img = img.composite(overlay).combine_options do |c|
       c.font 'font/rounded-mplus-1c-bold.ttf'
       c.strokewidth opts['stroke_width']
       c.interline_spacing opts['interline_spacing']
@@ -55,10 +59,6 @@ module Ozorotter
       draw.call degrees, margin, 0
       c.pointsize 0.75*font_size
       draw.call weather.description, margin, 1.2*font_size
-    end
-
-    img = img.composite icon do |c|
-      c.geometry "#{opts['icon_size']}x+#{2*margin}+#{2*margin}"
     end
 
     img

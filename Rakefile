@@ -2,16 +2,12 @@ require_relative 'lib/ozorotter'
 require 'active_support/core_ext/time'
 
 task :test do
-  weather = Ozorotter::Weather.new \
-    Time.at(1428178505).in_time_zone('Asia/Tokyo'),
-    'Tokyo, Japan',
-    'Light Rain',
-    10
+  weather = Ozorotter::WeatherAPI.get_weather 'NY/New_York_City'
 
-  Ozorotter::make_image \
+  img = Ozorotter::make_image \
     weather,
     'tmp/test.png',
-    'tmp/snow.jpg',
-    'tmp/nt_rain.gif'
+    'tmp/snow.jpg'
+  img.write 'out.jpg'
 end
 

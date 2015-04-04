@@ -10,9 +10,14 @@ image:
   interline_spacing: -5
   icon_size: 75
 
+weather_underground:
+  api:
+    key: your_key_here
+
 twitter:
   api:
     consumer_key:        put
     consumer_secret:     your
     access_token:        keys
     access_token_secret: here
+
