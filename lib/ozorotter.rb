@@ -4,6 +4,7 @@ require 'mini_magick'
 require 'yaml'
 require_relative 'ozorotter/weather'
 require_relative 'ozorotter/weather_api'
+require_relative 'ozorotter/search'
 require_relative 'mini_magick/image'
 
 module Ozorotter
@@ -11,6 +12,23 @@ module Ozorotter
   @config ||= YAML.load_file 'config.yml'
 
   module_function
+  def random_image
+    weather = WeatherAPI::random_weather
+
+    # TODO: This is for debugging only
+    weather.location = WeatherAPI.random_location.split('/').last.gsub('_', ' ')
+    weather.description = %w{
+      storm rain cloudy sunny fog snow
+    }.sample
+
+    background = Search::search weather.location, weather.description
+    foreground = random_foreground
+    make_image weather, foreground, background
+  end
+
+  def random_foreground
+    'tmp/test.png' # TODO: Change this
+  end
 
   def make_image weather, overlay_path, background_url
     opts = @config['image']
@@ -48,15 +66,21 @@ module Ozorotter
         c.draw draw_command
       end
 
-      c.pointsize font_size
       c.gravity 'SouthWest'
+      # Location
+      c.pointsize font_size
       draw.call weather.location, margin, 0
+
+      # Time
       c.pointsize 0.5*font_size
       draw.call time, margin, 1.2*font_size
 
-      c.pointsize font_size
       c.gravity 'NorthEast'
+      # Temperature
+      c.pointsize font_size
       draw.call degrees, margin, 0
+
+      # Description
       c.pointsize 0.75*font_size
       draw.call weather.description, margin, 1.2*font_size
     end

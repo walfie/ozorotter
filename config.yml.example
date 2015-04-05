@@ -10,7 +10,8 @@ image:
   interline_spacing: -5
   icon_size: 75
 
-weather_underground:
+weather:
+  locations_file: locations.txt
   api:
     key: your_key_here
 

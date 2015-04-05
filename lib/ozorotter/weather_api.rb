@@ -4,10 +4,22 @@ require 'uri'
 require_relative 'weather'
 
 module Ozorotter::WeatherAPI
+  @config ||= YAML.load_file('config.yml')['weather']
   # TODO: Better config management (not hardcoded filename)
-  @key ||= YAML.load_file('config.yml')['weather_underground']['api']['key']
+  @key = @config['api']['key']
+  @locations_file = @config['locations_file']
 
   module_function
+
+  def random_weather
+    get_weather random_location
+  end
+
+  def random_location
+    location = File.readlines(@locations_file)
+      .reject(&:blank?)
+      .sample.sub("\n", '')
+  end
 
   def get_json url
     uri = URI.parse url
