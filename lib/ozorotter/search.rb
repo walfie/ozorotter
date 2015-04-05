@@ -29,6 +29,8 @@ module Ozorotter::Search
         results = Google::Search::Image.new(search_settings).to_a
         uri = results.sample.uri unless results.empty?
         return uri
+      rescue Exception => e
+        puts e.message
       end
     end
 

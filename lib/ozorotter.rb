@@ -17,7 +17,7 @@ module Ozorotter
     time_of_day = weather.icon.include?('nt_') ? 'night' : 'day'
     location = weather.location.split(',').first
 
-    background = Search::search "#{weather.location} #{time_of_day}", weather.description
+    background = Search::search "#{location} #{time_of_day}", weather.description
     foreground = random_foreground
     make_image weather, foreground, background
   end
