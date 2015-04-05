@@ -14,14 +14,9 @@ module Ozorotter
   module_function
   def random_image
     weather = WeatherAPI::random_weather
+    time_of_day = weather.icon.include?('nt_') ? 'night' : 'day'
 
-    # TODO: This is for debugging only
-    weather.location = WeatherAPI.random_location.split('/').last.gsub('_', ' ')
-    weather.description = %w{
-      storm rain cloudy sunny fog snow
-    }.sample
-
-    background = Search::search weather.location, weather.description
+    background = Search::search "#{weather.location} #{time_of_day}", weather.description
     foreground = random_foreground
     make_image weather, foreground, background
   end
@@ -37,7 +32,7 @@ module Ozorotter
     margin = opts['margin']
 
     degrees = "#{weather.celsius.round 1}°C | #{weather.fahrenheit.round 1}°F"
-    time = weather.time.strftime "%a %-I:%m%p (%Z)\n%Y/%m/%d"
+    time = weather.time.strftime "%a %-I:%M%p (%Z)\n%Y/%m/%d"
 
     background = MiniMagick::Image.open(background_url).resize_to_fill w, h
     overlay = MiniMagick::Image.open overlay_path

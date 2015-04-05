@@ -28,11 +28,16 @@ module Ozorotter::WeatherAPI
   end
 
   def get_weather location
-    #url = "http://api.wunderground.com/api/#{@key}/conditions/q/#{location}.json"
-    url = 'http://localhost:8000/tmp/sample.json'
+    url = "http://api.wunderground.com/api/#{@key}/conditions/q/#{location}.json"
     json = get_json(url)['current_observation']
 
-    time = Time.at(json['local_epoch'].to_i).in_time_zone json['local_tz_long']
+    # DEBUG
+    puts url
+
+    time = Time
+      .at(json['local_epoch'].to_i || Time.now)
+      .in_time_zone json['local_tz_long']
+
     location = json['display_location']['full']
     description = json['weather']
     celsius = json['temp_c']
