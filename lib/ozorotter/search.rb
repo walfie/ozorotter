@@ -9,13 +9,13 @@ module Ozorotter::Search
     when /snow|ice|hail/ then 'snowy'
     when /mist|fog|haze/ then 'foggy'
     when /cloud|overcast/ then 'cloudy'
-    when /clear/ then 'sunny'
+    when /clear/ then 'clear sky'
     else term
     end
   end
 
   def search location, description, n_tries=5
-    query = "#{location} #{categorize_search description} weather"
+    query = "#{location} #{categorize_search description}"
     puts "Searching '#{query}'"
 
     n_tries.times do
@@ -24,7 +24,7 @@ module Ozorotter::Search
           query: query,
           safe: 'active',
           image_size: :medium,
-          extensions: :jpg
+          file_type: :jpg
         }
         results = Google::Search::Image.new(search_settings).to_a
         uri = results.sample.uri unless results.empty?

@@ -11,7 +11,7 @@ image:
   icon_size: 75
 
 weather:
-  locations_file: locations.txt
+  locations_file: locations.yml
   api:
     key: your_key_here
 

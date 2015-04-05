@@ -15,6 +15,7 @@ module Ozorotter
   def random_image
     weather = WeatherAPI::random_weather
     time_of_day = weather.icon.include?('nt_') ? 'night' : 'day'
+    location = weather.location.split(',').first
 
     background = Search::search "#{weather.location} #{time_of_day}", weather.description
     foreground = random_foreground
