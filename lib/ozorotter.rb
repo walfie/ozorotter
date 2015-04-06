@@ -7,6 +7,7 @@ require 'yaml'
 require_relative 'ozorotter/weather'
 require_relative 'ozorotter/weather_api'
 require_relative 'ozorotter/search'
+require_relative 'ozorotter/twitter'
 require_relative 'mini_magick/image'
 
 module Ozorotter
@@ -14,8 +15,7 @@ module Ozorotter
   @config ||= YAML.load_file 'config.yml'
 
   module_function
-  def random_image
-    weather = WeatherAPI::random_weather
+  def image_from_weather weather
     time_of_day = weather.icon.include?('nt_') ? 'night' : 'day'
     location = weather.location
 
@@ -41,8 +41,8 @@ module Ozorotter
     font_size = opts['font_size']
     margin = opts['margin']
 
-    degrees = "#{weather.celsius.round 1}°C | #{weather.fahrenheit.round 1}°F"
-    time = weather.time.strftime "%a %-I:%M%p (%Z)\n%Y/%m/%d"
+    degrees = weather.temperature_string
+    time = weather.time_string
 
     background = MiniMagick::Image.open(background_url).resize_to_fill w, h
     overlay = MiniMagick::Image.open overlay_path
@@ -52,7 +52,11 @@ module Ozorotter
       c.geometry "#{opts['icon_size']}x+#{2*margin}+#{2*margin}"
     end
 
-    img = img.composite(overlay).combine_options do |c|
+    img = img.composite overlay do |c|
+      c.gravity 'South'
+    end
+
+    img = img.combine_options do |c|
       c.font 'font/rounded-mplus-1c-bold.ttf'
       c.strokewidth opts['stroke_width']
       c.interline_spacing opts['interline_spacing']

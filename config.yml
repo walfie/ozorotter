@@ -1,7 +1,7 @@
 ---
 image:
   overlay_dir: overlays
-  width: 640
+  width: 980
   height: 480
   font: font/rounded-mplus-1c-bold.ttf
 
@@ -9,7 +9,7 @@ image:
   margin: 5
   stroke_width: 4.5
   interline_spacing: -5
-  icon_size: 75
+  icon_size: 100
 
 weather:
   locations_file: locations.yml

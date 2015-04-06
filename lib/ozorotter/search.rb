@@ -23,7 +23,7 @@ module Ozorotter::Search
         search_settings = {
           query: query,
           safe: 'active',
-          image_size: :medium,
+          image_size: :large,
           file_type: :jpg
         }
         results = Google::Search::Image.new(search_settings).to_a
