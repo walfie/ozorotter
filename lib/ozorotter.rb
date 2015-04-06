@@ -17,10 +17,15 @@ module Ozorotter
   def random_image
     weather = WeatherAPI::random_weather
     time_of_day = weather.icon.include?('nt_') ? 'night' : 'day'
-    location = weather.location.split(',').first
+    location = weather.location
 
+    # Search Google for an image
     background = Search::search "#{location} #{time_of_day}", weather.description
+
+    # Get random overlay image from local folder
     foreground = random_foreground
+
+    # Put it all together
     make_image weather, foreground, background
   end
 
