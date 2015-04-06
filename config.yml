@@ -5,7 +5,7 @@ image:
   height: 480
   font: font/rounded-mplus-1c-bold.ttf
 
-  font_size: 42
+  font_size: 50
   margin: 5
   stroke_width: 4.5
   interline_spacing: -5

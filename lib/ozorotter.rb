@@ -61,7 +61,7 @@ module Ozorotter
       c.strokewidth opts['stroke_width']
       c.interline_spacing opts['interline_spacing']
 
-      draw = ->(text, x, y) do
+      draw = ->(text, x, y, color='white') do
         draw_command = "text #{x},#{y} '#{text}'"
 
         # Outline
@@ -71,7 +71,7 @@ module Ozorotter
 
         # Fill
         c.stroke 'none'
-        c.fill 'white'
+        c.fill color
         c.draw draw_command
       end
 
