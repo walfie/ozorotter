@@ -1,5 +1,6 @@
 ---
 image:
+  overlay_dir: overlays
   width: 640
   height: 480
   font: font/your-font-here.ttf

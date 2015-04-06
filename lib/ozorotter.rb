@@ -23,7 +23,9 @@ module Ozorotter
   end
 
   def random_foreground
-    'tmp/test.png' # TODO: Change this
+    # TODO: Account for weather type
+    img_dir = @config['image']['overlay_dir']
+    Dir["#{img_dir}/*.{png,gif}"].sample
   end
 
   def make_image weather, overlay_path, background_url
@@ -76,9 +78,13 @@ module Ozorotter
       c.pointsize font_size
       draw.call degrees, margin, 0
 
-      # Description
       c.pointsize 0.75*font_size
-      draw.call weather.description, margin, 1.2*font_size
+
+      # Humidity
+      draw.call "Humidity: #{weather.humidity}", margin, 1.2*font_size
+
+      # Description
+      draw.call weather.description, margin, 2.1*font_size
     end
 
     img

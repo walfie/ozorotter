@@ -40,9 +40,10 @@ module Ozorotter::WeatherAPI
     location = json['display_location']['full']
     description = json['weather']
     celsius = json['temp_c']
+    humidity = json['relative_humidity']
     icon = json['icon_url']
 
-    Ozorotter::Weather.new time, location, description, celsius, icon
+    Ozorotter::Weather.new time, location, description, celsius, humidity, icon
   end
 end
 
