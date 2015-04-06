@@ -4,10 +4,11 @@ require 'uri'
 require 'yaml'
 require_relative 'weather'
 
+# TODO: Probably should make this into a class that takes a key as input
 module Ozorotter::WeatherAPI
+  @key = ENV['WUNDERGROUND_KEY']
+
   @config ||= YAML.load_file('config.yml')['weather']
-  # TODO: Better config management (not hardcoded filename)
-  @key = @config['api']['key']
   @locations = YAML.load_file @config['locations_file']
 
   module_function

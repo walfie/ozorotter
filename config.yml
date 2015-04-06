@@ -3,7 +3,7 @@ image:
   overlay_dir: overlays
   width: 640
   height: 480
-  font: font/your-font-here.ttf
+  font: font/rounded-mplus-1c-bold.ttf
 
   font_size: 42
   margin: 5

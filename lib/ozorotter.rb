@@ -1,4 +1,6 @@
 # Oh boy let me tell you about how bad this code is
+require 'dotenv'
+Dotenv.load
 
 require 'mini_magick'
 require 'yaml'
