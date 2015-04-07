@@ -18,21 +18,23 @@ module Ozorotter
   def image_from_weather weather
     time_of_day = weather.icon.include?('nt_') ? 'night' : 'day'
     location = weather.location
+    category = weather.categorize
 
     # Search Google for an image
-    background = Search::search "#{location} #{time_of_day}", weather.description
+    background = Search::search "#{location} #{time_of_day}", category
 
     # Get random overlay image from local folder
-    foreground = random_foreground
+    foreground = random_foreground category
 
     # Put it all together
     make_image weather, foreground, background
   end
 
-  def random_foreground
-    # TODO: Account for weather type
+  def random_foreground weather_type='default'
     img_dir = @config['image']['overlay_dir']
-    Dir["#{img_dir}/*.{png,gif}"].sample
+    sub_dir = Dir.exists?("#{img_dir}/#{weather_type}") ? weather_type : 'default'
+
+    Dir["#{img_dir}/#{sub_dir}/*.{png,gif}"].sample
   end
 
   def make_image weather, overlay_path, background_url

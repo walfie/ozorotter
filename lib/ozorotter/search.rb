@@ -2,21 +2,9 @@ require 'google-search'
 
 module Ozorotter::Search
   module_function
-  def categorize_search term
-    word = case term.downcase
-    when /storm/ then 'stormy'
-    when /rain|drizzle/ then 'rainy'
-    when /snow|ice|hail/ then 'snowy'
-    when /mist|fog/ then 'foggy'
-    when /haze|smoke/ then 'haze'
-    when /cloud|overcast/ then 'cloudy'
-    when /clear/ then 'clear sky'
-    else term
-    end
-  end
 
   def search location, description, n_tries=5
-    query = "#{location} #{categorize_search description}"
+    query = "#{location} #{description}"
     puts "Searching '#{query}'"
 
     n_tries.times do

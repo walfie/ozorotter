@@ -19,6 +19,19 @@ module Ozorotter
     def time_string
       time.strftime "%a %-I:%M%p (%Z)\n%Y/%m/%d"
     end
+
+    def categorize
+      word = case description.downcase
+      when /storm/ then 'stormy'
+      when /rain|drizzle/ then 'rainy'
+      when /snow|ice|hail/ then 'snowy'
+      when /mist|fog/ then 'foggy'
+      when /haze|smoke/ then 'haze'
+      when /cloud|overcast/ then 'cloudy'
+      when /clear/ then 'clear sky'
+      else description.downcase
+      end
+    end
   end
 end
 
