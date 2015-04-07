@@ -32,7 +32,10 @@ module Ozorotter
 
   def random_foreground weather_type='default'
     img_dir = @config['image']['overlay_dir']
-    sub_dir = Dir.exists?("#{img_dir}/#{weather_type}") ? weather_type : 'default'
+    sub_dir = case weather_type
+    when /rain|storm/ then 'rainy'
+    else 'default'
+    end
 
     Dir["#{img_dir}/#{sub_dir}/*.{png,gif}"].sample
   end
