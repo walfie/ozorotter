@@ -12,7 +12,8 @@ task :tweet do
 
   # Is there some way to convert an image to a file without saving and opening it?
   out_path = 'output/out.jpg'
-  image = Ozorotter::image_from_weather weather
+  image_data = Ozorotter::image_from_weather weather
+  image = image_data[:image]
   image.write out_path
 
   #file = open out_path

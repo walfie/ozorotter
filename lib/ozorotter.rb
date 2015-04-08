@@ -20,11 +20,12 @@ module Ozorotter
     category = weather.categorize
 
     # Search Flickr for an image
-    background = Search::flickr_search(
+    photo = Search::flickr_search(
       weather.lat,
       weather.long,
       "#{category},#{time_of_day}"
     )
+    background = (photo || {})[:image_url]
     if background.nil?
       category.sub! 'clear', 'clear sky'
       background = Search::google_search(weather.location, category)
@@ -34,7 +35,8 @@ module Ozorotter
     foreground = random_foreground category
 
     # Put it all together
-    make_image weather, foreground, background
+    image = make_image weather, foreground, background
+    { image: image, meta: photo } # TODO: Better flow instead of returning this
   end
 
   def random_foreground weather_type='default'

@@ -60,6 +60,7 @@ module Ozorotter::Search
     if photos.length < @photos_threshold
       puts 'Searching without group ID'
       params.delete :group_id
+      params[:tags] = params[:tags].sub('clear', 'clear sky')
       photos = flickr_search_params params
     end
 
@@ -70,10 +71,11 @@ module Ozorotter::Search
 
     photo = photos.sample
     url = FlickRaw.url photo
+    page_url = FlickRaw.url_photopage(photo)
     puts photo.inspect
-    puts url, FlickRaw.url_photopage(photo)
+    puts url, page_url
 
-    url
+    { image_url: url, page_url: page_url, author: photo.ownername, title: photo.title }
   end
 
   def flickr_search_params params
