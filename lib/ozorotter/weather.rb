@@ -1,5 +1,13 @@
 module Ozorotter
-  Weather = Struct.new :time, :location, :description, :celsius, :humidity, :icon do
+  class Weather
+    attr_reader :time, :location, :description, :celsius, :humidity, :icon, :lat, :long
+
+    def initialize args
+      args.each do |k,v|
+        instance_variable_set("@#{k}", v) unless v.nil?
+      end
+    end
+
     def fahrenheit
       celsius * 9/5 + 32
     end
@@ -21,16 +29,21 @@ module Ozorotter
     end
 
     def categorize
+      # Project Weather tags
+      # https://www.flickr.com/groups/1463451@N25/discuss/72157633275888770/72157633276043030
       word = case description.downcase
-      when /storm/ then 'stormy'
-      when /rain|drizzle/ then 'rainy'
-      when /snow|ice|hail/ then 'snowy'
-      when /mist|fog/ then 'foggy'
-      when /haze|smoke/ then 'haze'
+      when /rain|drizzle|shower/ then 'rain'
+      when /snow|ice|hail/ then 'snow'
+      when /thunderstorm/ then 'storm'
       when /cloud|overcast/ then 'cloudy'
-      when /clear/ then 'clear sky'
+      when /clear/ then 'clear'
+      when /mist|fog|haze|smoke|ash|dust|sand|spray/ then 'fog'
       else description.downcase
       end
+
+      # sunrise, sunset, night, day
+      # clear, cloudy, partlycloudy, rain, snow, storm, or fog
+      # https://www.flickr.com/groups/1463451@N25/discuss/72157648737791827/72157649166434595
     end
   end
 end

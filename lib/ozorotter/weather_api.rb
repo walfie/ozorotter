@@ -38,13 +38,16 @@ module Ozorotter::WeatherAPI
       .at(json['local_epoch'].to_i || Time.now)
       .in_time_zone json['local_tz_long']
 
-    location = json['display_location']['full']
-    description = json['weather']
-    celsius = json['temp_c']
-    humidity = json['relative_humidity']
-    icon = json['icon_url']
-
-    Ozorotter::Weather.new time, location, description, celsius, humidity, icon
+    Ozorotter::Weather.new(
+      time: time,
+      location: json['display_location']['full'],
+      lat: json['display_location']['latitude'],
+      long: json['display_location']['longitude'],
+      description: json['weather'],
+      celsius: json['temp_c'],
+      humidity: json['relative_humidity'],
+      icon: json['icon_url']
+    )
   end
 end
 
