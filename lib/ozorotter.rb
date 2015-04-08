@@ -17,11 +17,18 @@ module Ozorotter
   module_function
   def image_from_weather weather
     time_of_day = weather.icon.include?('nt_') ? 'night' : 'day'
-    location = weather.location
     category = weather.categorize
 
-    # Search Google for an image
-    background = Search::search "#{location} #{time_of_day}", category
+    # Search Flickr for an image
+    background = Search::flickr_search(
+      weather.lat,
+      weather.long,
+      "#{category},#{time_of_day}"
+    )
+    if background.nil?
+      category.sub! 'clear', 'clear sky'
+      background = Search::google_search(weather.location, category)
+    end
 
     # Get random overlay image from local folder
     foreground = random_foreground category
