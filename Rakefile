@@ -21,12 +21,10 @@ task :tweet do
   tweet = Ozorotter::Twitter.tweet text, file, geo
 
   meta = image_data[:meta]
-  credits = if meta[:source] == 'flickr'
-    %Q{Source: "#{meta[:title]}" by #{meta[:author]} on Flickr\n#{meta[:page_url]}}
-  else
-    "Source: #{meta[:image_url]} via #{meta[:page_url]}"
+  if meta[:source] == 'flickr'
+    credits = %Q{Source: "#{meta[:title]}" by #{meta[:author]} on Flickr\n#{meta[:page_url]}}
+    Ozorotter::Twitter.reply tweet.id, "@#{tweet.user.screen_name} #{credits}", geo
   end
-  Ozorotter::Twitter.reply tweet.id, "@#{tweet.user.screen_name} #{credits}", geo
 end
 
 task :test do
