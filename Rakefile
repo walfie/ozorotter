@@ -21,11 +21,13 @@ task :tweet do
   tweet = Ozorotter::Twitter.tweet text, file, geo
 
   meta = image_data[:meta]
-  if meta[:source] == 'flickr'
-    credits = %Q{Source: "#{meta[:title]}" by #{meta[:author]} on Flickr\n#{meta[:page_url]}}
-    sleep rand(5..10)
-    Ozorotter::Twitter.reply tweet, "@#{tweet.user.screen_name} #{credits}", geo
+  credits = if meta[:source] == 'flickr'
+    %Q{Source: "#{meta[:title]}" by #{meta[:author]} on Flickr\n#{meta[:page_url]}}
+  else
+    "Source: #{meta[:image_url]} via #{meta[:page_url]}"
   end
+  sleep rand(5..10)
+  Ozorotter::Twitter.reply tweet, "@#{tweet.user.screen_name} #{credits}", geo
 end
 
 task :test do
