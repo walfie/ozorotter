@@ -18,12 +18,16 @@ module Ozorotter::Twitter
     end
   end
 
-  def tweet text, file
+  def tweet text, file, options={}
     tweet = begin
-      client.update_with_media text, file
+      client.update_with_media text, file, options
     rescue Twitter::Error::RequestTimeout
       sleep 15
       retry
     end
+  end
+
+  def reply tweet, text, options={}
+    client.update text, options.merge(in_reply_to_status: tweet)
   end
 end

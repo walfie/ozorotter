@@ -16,8 +16,15 @@ task :tweet do
   image = image_data[:image]
   image.write out_path
 
-  #file = open out_path
-  #Ozorotter::Twitter.tweet text, file
+  file = open out_path
+  geo = { lat: weather.lat.to_f, long: weather.long.to_f }
+  tweet = Ozorotter::Twitter.tweet text, file, geo
+
+  meta = image_data[:meta]
+  if meta[:source] == 'flickr'
+    credits = %Q{@#{tweet.user.screen_name} Source: "#{meta[:title]}" by #{meta[:author]} on Flickr\n#{meta[:page_url]}}
+    Ozorotter::Twitter.reply tweet, credits, geo
+  end
 end
 
 task :test do
