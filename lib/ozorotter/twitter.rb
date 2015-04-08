@@ -40,8 +40,8 @@ module Ozorotter::Twitter
     end
   end
 
-  def reply tweet_id, text, options={}
-    client2.update text, options.merge(in_reply_to_status_id: tweet_id)
+  def reply tweet, text, options={}
+    client2.update text, options.merge(in_reply_to_status: tweet)
   end
 end
 

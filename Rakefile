@@ -24,7 +24,7 @@ task :tweet do
   if meta[:source] == 'flickr'
     credits = %Q{Source: "#{meta[:title]}" by #{meta[:author]} on Flickr\n#{meta[:page_url]}}
     sleep rand(5..10)
-    Ozorotter::Twitter.reply tweet.id, "@#{tweet.user.screen_name} #{credits}", geo
+    Ozorotter::Twitter.reply tweet, "@#{tweet.user.screen_name} #{credits}", geo
   end
 end
 
