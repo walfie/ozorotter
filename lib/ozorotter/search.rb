@@ -24,6 +24,7 @@ module Ozorotter::Search
           file_type: :jpg
         }
         results = Google::Search::Image.new(search_settings).to_a
+        results.reject { |r| r.uri.include? 'getty' } # TODO: Put in conf
         return nil if results.empty?
 
         image = results.sample
@@ -68,8 +69,9 @@ module Ozorotter::Search
 
     if photos.length < @photos_threshold
       puts 'Searching without group ID'
+      params[:text] = params[:tags].sub('clear', 'clear sky')
       params.delete :group_id
-      params[:tags] = params[:tags].sub('clear', 'clear sky')
+      params.delete :tags
       photos = flickr_search_params params
     end
 
