@@ -25,12 +25,11 @@ module Ozorotter
       weather.long,
       "#{category},#{time_of_day}"
     )
-    background = photo[:image_url]
-    if background.nil?
+    if photo.nil?
       category.sub! 'clear', 'clear sky'
       photo = Search::google_search(weather.location, category)
-      background = photo[:image_url]
     end
+    background = photo[:image_url]
 
     # Get random overlay image from local folder
     foreground = random_foreground category
