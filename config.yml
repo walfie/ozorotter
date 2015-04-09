@@ -1,7 +1,7 @@
 ---
 image:
   overlay_dir: overlays
-  width: 980
+  width: 960
   height: 480
   font: font/rounded-mplus-1c-bold.ttf
 
