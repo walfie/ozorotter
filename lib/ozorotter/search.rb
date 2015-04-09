@@ -22,8 +22,8 @@ module Ozorotter::Search
     mappings[search_term] || search_term
   end
 
-  def google_search location, description, n_tries=5
-    query = "#{location} #{google_search_map description}"
+  def google_search location, description, time_of_day, n_tries=5
+    query = "#{location} #{google_search_map description} #{time_of_day}"
     puts "Searching Google: '#{query}'"
 
     n_tries.times do

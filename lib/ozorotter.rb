@@ -28,7 +28,7 @@ module Ozorotter
       "#{category},#{time_of_day}"
     )
     if photo.nil?
-      photo = Search::google_search(weather.location, category)
+      photo = Search::google_search(weather.location, category, time_of_day)
       return nil if photo.nil?
     end
     background = photo[:image_url]
