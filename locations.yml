@@ -1,4 +1,6 @@
 ---
+- 'zmw:00000.1.11034' #AT/Vienna
+- 'zmw:00000.1.94868' #AU/Melbourne
 - 'zmw:00000.1.94767' #AU/Sydney
 - 'zmw:00000.1.41923' #BD/Dhaka
 - 'zmw:00000.1.83755' #BR/Rio_de_Janeiro
@@ -7,20 +9,24 @@
 - 'zmw:00000.1.71265' #CA/Toronto
 - 'zmw:00000.1.71627' #CA/Montreal
 - 'zmw:00000.1.71892' #CA/Vancouver
+- 'zmw:00000.1.06660' #CH/Zurich
 - 'zmw:00000.1.85574' #CL/Santiago
 - 'zmw:00000.1.54511' #CN/Beijing
 - 'zmw:00000.1.45007' #CN/Hong_Kong
 - 'zmw:00000.1.58362' #CN/Shanghai
 - 'zmw:00000.1.80222' #CO/Bogota
 - 'zmw:00000.10.10389' #DE/Berlin
+- 'zmw:00000.1.10637' #DE/Frankfurt
 - 'zmw:00000.1.62366' #EG/Cairo
 - 'zmw:00000.1.08181' #ES/Barcelona
 - 'zmw:00000.1.08221' #ES/Madrid
 - 'zmw:00000.37.07156' #FR/Paris
 - 'zmw:00000.1.16716' #GR/Athens
 - 'zmw:00000.2.96745' #ID/Jakarta
+- 'zmw:00000.1.03969' #IE/Dublin
 - 'zmw:00000.18.42809' #IN/Calcutta
 - 'zmw:00000.1.43003' #IN/Mumbai
+- 'zmw:00000.1.42181' #IN/New_Delhi
 - 'zmw:00000.1.40754' #IR/Tehran
 - 'zmw:00000.1.16066' #IT/Milan
 - 'zmw:00000.1.16240' #IT/Rome
@@ -30,6 +36,8 @@
 - 'zmw:00000.1.47806' #JP/Fukuoka
 - 'zmw:00000.1.47654' #JP/Hamamatsu
 - 'zmw:00000.1.47792' #JP/Hiroshima
+- 'zmw:00000.1.47605' #JP/Kanazawa
+- 'zmw:00000.6.47671' #JP/Kawasaki
 - 'zmw:00000.1.47853' #JP/Kitakyushu
 - 'zmw:00000.1.47770' #JP/Kobe
 - 'zmw:00000.1.47759' #JP/Kyoto
@@ -62,8 +70,11 @@
 - 'zmw:00000.1.41194' #UAE/Dubai
 - 'zmw:00000.1.03140' #UK/Glasgow
 - 'zmw:00000.1.03772' #UK/London
+- 'zmw:00000.1.03334' #UK/Manchester
+- 'zmw:99501.1.99999' #US/AK/Anchorage
 - 'zmw:90001.1.99999' #US/CA/Los_Angeles
 - 'zmw:94101.1.99999' #US/CA/San_Francisco
+- 'zmw:80202.1.99999' #US/CO/Denver
 - 'zmw:20001.1.99999' #US/District_of_Columbia
 - 'zmw:33010.2.99999' #US/FL/Miami
 - 'zmw:30301.1.99999' #US/GA/Atlanta
