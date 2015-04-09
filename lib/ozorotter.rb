@@ -19,6 +19,8 @@ module Ozorotter
     time_of_day = weather.icon.include?('nt_') ? 'night' : 'day'
     category = weather.categorize
 
+    puts "Visiting #{weather.location}..."
+
     # Search Flickr for an image
     photo = Search::flickr_search(
       weather.lat,

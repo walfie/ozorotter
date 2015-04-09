@@ -41,12 +41,12 @@ task :test do
     location: 'New York City, NY',
     lat: '40.743301',
     long: '-73.985466',
-    description: 'clear',
+    description: 'cloudy',
     celsius: 10.0,
     humidity: '50%',
     icon: 'http://icons-ak.wxug.com/i/c/k/nt_partlycloudy.gif'
   )
-  image = Ozorotter::image_from_weather weather
-  image.write out_path
+  image_data = Ozorotter::image_from_weather weather
+  image_data[:image].write out_path
 end
 

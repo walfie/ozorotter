@@ -26,6 +26,7 @@
 - 'zmw:00000.1.16240' #IT/Rome
 - 'zmw:00000.1.16105' #IT/Venice
 - 'zmw:00000.1.47682' #JP/Chiba
+- 'zmw:00000.1.47639' #JP/Fujisan
 - 'zmw:00000.1.47806' #JP/Fukuoka
 - 'zmw:00000.1.47654' #JP/Hamamatsu
 - 'zmw:00000.1.47792' #JP/Hiroshima
@@ -58,6 +59,7 @@
 - 'zmw:00000.4.48455' #TH/Bangkok
 - 'zmw:00000.1.17060' #TR/Istanbul
 - 'zmw:00000.1.58968' #TW/Taipei
+- 'zmw:00000.1.41194' #UAE/Dubai
 - 'zmw:00000.1.03140' #UK/Glasgow
 - 'zmw:00000.1.03772' #UK/London
 - 'zmw:90001.1.99999' #US/CA/Los_Angeles
@@ -69,6 +71,7 @@
 - 'zmw:60290.1.99999' #US/IL/Chicago
 - 'zmw:02101.1.99999' #US/MA/Boston
 - 'zmw:48201.1.99999' #US/MI/Detroit
+- 'zmw:89044.2.99999' #US/NV/Las_Vegas
 - 'zmw:10001.5.99999' #US/NY/New_York_City
 - 'zmw:97201.1.99999' #US/OR/Portland
 - 'zmw:19019.1.99999' #US/PA/Philadelphia
