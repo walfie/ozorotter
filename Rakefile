@@ -22,6 +22,7 @@ task :tweet do
   file = open out_path
   geo = { lat: weather.lat.to_f, long: weather.long.to_f }
   tweet = Ozorotter::Twitter.tweet text, file, geo
+  puts "Tweeted: #{tweet.uri}"
 
   meta = image_data[:meta]
   credits = if meta[:source] == 'flickr'

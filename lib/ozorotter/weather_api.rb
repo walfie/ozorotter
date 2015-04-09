@@ -1,3 +1,4 @@
+require 'active_support/core_ext/time'
 require 'json'
 require 'net/http'
 require 'uri'
@@ -36,7 +37,7 @@ module Ozorotter::WeatherAPI
 
     time = Time
       .at(json['local_epoch'].to_i || Time.now)
-      .in_time_zone json['local_tz_long']
+      .in_time_zone(json['local_tz_long'])
 
     Ozorotter::Weather.new(
       time: time,

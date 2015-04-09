@@ -17,7 +17,7 @@ module Ozorotter
   module_function
   def image_from_weather weather
     time_of_day = weather.icon.include?('nt_') ? 'night' : 'day'
-    category = weather.categorize
+    category = weather.category
 
     puts "Visiting #{weather.location}..."
 
@@ -34,19 +34,23 @@ module Ozorotter
     background = photo[:image_url]
 
     # Get random overlay image from local folder
-    foreground = random_foreground category
+    foreground = random_foreground weather
 
     # Put it all together
     image = make_image weather, foreground, background
     { image: image, meta: photo } # TODO: Better flow instead of returning this
   end
 
-  def random_foreground weather_type='default'
+  def random_foreground weather
     img_dir = @config['image']['overlay_dir']
-    sub_dir = case weather_type
-    when /rain|storm/ then 'rainy'
-    else 'default'
-    end
+    sub_dir =
+      if weather.category =~ /rain|storm/
+        'rainy'
+      elsif weather.time.hour < 6
+        '{sleepy,default}'
+      else
+        'default'
+      end
 
     Dir["#{img_dir}/#{sub_dir}/*.{png,gif}"].sample
   end

@@ -105,7 +105,7 @@ module Ozorotter::Search
   end
 
   def flickr_search_params params
-    puts 'Searching Flickr:', params
+    puts "Searching Flickr: #{params}"
     photos = flickr.photos.search(params).to_a
     puts "#{photos.length} photos matched."
     photos
