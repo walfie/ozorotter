@@ -34,13 +34,16 @@
 - 'zmw:00000.1.47759' #JP/Kyoto
 - 'zmw:00000.1.47819' #JP/Kumamoto
 - 'zmw:00000.1.47636' #JP/Nagoya
+- 'zmw:00000.1.47780' #JP/Nara
 - 'zmw:00000.1.47604' #JP/Niigata
+- 'zmw:00000.1.47931' #JP/Okinawa
 - 'zmw:00000.1.47772' #JP/Osaka
 - 'locid:JAXX0117' #JP/Saitama
 - 'zmw:00000.1.47742' #JP/Sakai
 - 'zmw:00000.1.47412' #JP/Sapporo
 - 'zmw:00000.6.47680' #JP/Sagamihara
 - 'zmw:00000.1.47590' #JP/Sendai
+- 'zmw:00000.8.47789' #JP/Takehara
 - 'zmw:00000.1.47671' #JP/Tokyo
 - 'zmw:00000.1.47670' #JP/Yokohama
 - 'zmw:00000.1.47117' #KR/Seoul
@@ -62,6 +65,7 @@
 - 'zmw:20001.1.99999' #US/District_of_Columbia
 - 'zmw:33010.2.99999' #US/FL/Miami
 - 'zmw:30301.1.99999' #US/GA/Atlanta
+- 'zmw:46201.1.99999' #US/IN/Indianapolis
 - 'zmw:60290.1.99999' #US/IL/Chicago
 - 'zmw:02101.1.99999' #US/MA/Boston
 - 'zmw:48201.1.99999' #US/MI/Detroit
@@ -70,5 +74,6 @@
 - 'zmw:19019.1.99999' #US/PA/Philadelphia
 - 'zmw:75201.1.99999' #US/TX/Dallas
 - 'zmw:77001.1.99999' #US/TX/Houston
+- 'zmw:98101.1.99999' #US/WA/Seattle
 - 'zmw:00000.1.68816' #ZA/Cape_Town
 
