@@ -11,8 +11,19 @@ module Ozorotter::Search
   @config ||= YAML.load_file('config.yml')['flickr']
   @photos_threshold = @config['photos_threshold']
 
+  def google_search_map search_term
+    mappings = {
+      'rain' => 'rainy',
+      'snow' => 'snow OR snowy',
+      'storm' => 'storm -snow',
+      'clear' => 'clear sky',
+      'fog' => 'fog OR foggy'
+    }
+    mappings[search_term] || search_term
+  end
+
   def google_search location, description, n_tries=5
-    query = "#{location} #{description}"
+    query = "#{location} #{google_search_map description}"
     puts "Searching Google: '#{query}'"
 
     n_tries.times do

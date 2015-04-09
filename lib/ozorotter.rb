@@ -28,7 +28,6 @@ module Ozorotter
       "#{category},#{time_of_day}"
     )
     if photo.nil?
-      category.sub! 'clear', 'clear sky'
       photo = Search::google_search(weather.location, category)
       return nil if photo.nil?
     end
