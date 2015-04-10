@@ -23,8 +23,8 @@ module Ozorotter::Search
     mappings[search_term] || search_term
   end
 
-  def google_search location, description, time_of_day, n_tries=5
-    query = "#{location} #{google_search_map description} #{time_of_day}"
+  def google_search weather, n_tries=5
+    query = "#{weather.location} #{google_search_map weather.category} #{weather.time_of_day}"
     puts "Searching Google: '#{query}'"
 
     n_tries.times do
@@ -55,17 +55,18 @@ module Ozorotter::Search
     raise "Image search failed #{n_tries} in a row"
   end
 
-  def flickr_search lat, long, tags
+  def flickr_search weather
     params = {
-      lat: lat,
-      lon: long,
-      tags: tags || 'weather',
+      lat: weather.lat,
+      lon: weather.long,
+      tags: "#{weather.category},#{weather.time_of_day}",
       tag_mode: 'all',
       extras: 'owner_name',
+      safe_search: 1,
       accuracy: @config['accuracy'],
       radius: @config['radius'],
       license: @config['licenses'],
-      group_id: @config['group_id']
+      group_id: @config['group_id'],
     }
 
     photos = flickr_search_params params
@@ -73,7 +74,7 @@ module Ozorotter::Search
     # TODO: Refactor this ugly logic. Please. It's so bad.
     if photos.length < @photos_threshold
       puts 'Searching without day/night'
-      params[:tags] = params[:tags].sub(/day|night|sunset|sunrise/, '')
+      params[:tags] = weather.category
       params.delete :tag_mode
       photos = flickr_search_params params
     end
@@ -81,6 +82,16 @@ module Ozorotter::Search
     if photos.length < @photos_threshold
       puts 'Searching without group ID'
       params.delete :group_id
+      photos = flickr_search_params params
+    end
+
+    if photos.length < @photos_threshold
+      puts 'Searching text'
+      params.delete :tags
+      params.delete :lat
+      params.delete :long
+
+      params[:text] = "#{weather.location} #{weather.category} #{weather.time_of_day}"
       photos = flickr_search_params params
     end
 

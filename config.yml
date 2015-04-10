@@ -17,6 +17,6 @@ weather:
 flickr:
   accuracy: 6 # https://www.flickr.com/services/api/flickr.photos.search.html
   radius: 32 # In km. Max 32.
-  photos_threshold: 10 # If less than n photos, search again with broader criteria
+  photos_threshold: 12 # If less than n photos, search again with broader criteria
   group_id: '1463451@N25' # Project Weather
   licenses: '1,2,4,5,7' # https://www.flickr.com/services/api/flickr.photos.licenses.getInfo.html

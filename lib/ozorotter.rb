@@ -22,13 +22,9 @@ module Ozorotter
     puts "Visiting #{weather.location}..."
 
     # Search Flickr for an image
-    photo = Search::flickr_search(
-      weather.lat,
-      weather.long,
-      "#{category},#{time_of_day}"
-    )
+    photo = Search::flickr_search weather
     if photo.nil?
-      photo = Search::google_search(weather.location, category, time_of_day)
+      photo = Search::google_search weather
       return nil if photo.nil?
     end
 

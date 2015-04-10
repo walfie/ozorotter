@@ -28,6 +28,10 @@ module Ozorotter
       time.strftime "%a %-I:%M%p (%Z)\n%Y/%m/%d"
     end
 
+    def time_of_day
+      icon.include?('nt_') ? 'night' : 'day'
+    end
+
     def category
       # Project Weather tags
       # https://www.flickr.com/groups/1463451@N25/discuss/72157633275888770/72157633276043030
