@@ -1,5 +1,6 @@
 require 'google-search'
 require 'flickraw'
+require_relative 'photo_data'
 
 module Ozorotter::Search
   module_function
@@ -41,12 +42,11 @@ module Ozorotter::Search
         image = results.sample
         uri = results.sample.uri unless results.empty?
 
-        # TODO: Make this into a class?
-        return {
+        return Ozorotter::PhotoData.new(
           source: 'google',
           image_url: image.uri,
           page_url: image.context_uri
-        }
+        )
       rescue Exception => e
         puts e.message
       end
@@ -95,13 +95,14 @@ module Ozorotter::Search
     puts photo.inspect
     puts url, page_url
 
-    {
+    Ozorotter::PhotoData.new(
       source: 'flickr',
       image_url: url,
       page_url: page_url,
+      short_url: "http://flic.kr/p/#{FlickRaw.base58 photo.id}",
       author: photo.ownername,
       title: photo.title
-    }
+    )
   end
 
   def flickr_search_params params

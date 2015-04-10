@@ -31,13 +31,12 @@ module Ozorotter
       photo = Search::google_search(weather.location, category, time_of_day)
       return nil if photo.nil?
     end
-    background = photo[:image_url]
 
     # Get random overlay image from local folder
     foreground = random_foreground weather
 
     # Put it all together
-    image = make_image weather, foreground, background
+    image = make_image weather, foreground, photo
     { image: image, meta: photo } # TODO: Better flow instead of returning this
   end
 
@@ -55,7 +54,7 @@ module Ozorotter
     Dir["#{img_dir}/#{sub_dir}/*.{png,gif}"].sample
   end
 
-  def make_image weather, overlay_path, background_url
+  def make_image weather, overlay_path, photo
     opts = @config['image']
     w, h = opts['width'], opts['height']
     font_size = opts['font_size']
@@ -64,7 +63,7 @@ module Ozorotter
     degrees = weather.temperature_string
     time = weather.time_string
 
-    background = MiniMagick::Image.open(background_url).resize_to_fill w, h
+    background = MiniMagick::Image.open(photo.image_url).resize_to_fill w, h
     overlay = MiniMagick::Image.open overlay_path
     icon = MiniMagick::Image.open weather.icon
 
@@ -116,6 +115,13 @@ module Ozorotter
 
       # Description
       draw.call weather.description, margin, 2.1*font_size
+
+      # Source
+      if photo.source == 'flickr'
+        c.gravity 'SouthEast'
+        c.pointsize 0.4*font_size
+        draw.call "by #{photo.author}\n#{photo.short_url}", margin, margin
+      end
     end
 
     img
