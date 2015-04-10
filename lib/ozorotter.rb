@@ -95,13 +95,22 @@ module Ozorotter
       end
 
       c.gravity 'SouthWest'
+
+      # Source
+      location_offset = 0
+      if photo.source == 'flickr'
+        c.pointsize 0.4*font_size
+        draw.call "Photo by #{photo.author} #{photo.short_url}", margin, margin
+        location_offset = 0.5*font_size
+      end
+
       # Location
       c.pointsize font_size
-      draw.call weather.location, margin, 0
+      draw.call weather.location, margin, location_offset
 
       # Time
       c.pointsize 0.5*font_size
-      draw.call time, margin, 1.2*font_size
+      draw.call time, margin, (1.2*font_size + location_offset)
 
       c.gravity 'NorthEast'
       # Temperature
@@ -115,13 +124,6 @@ module Ozorotter
 
       # Description
       draw.call weather.description, margin, 2.1*font_size
-
-      # Source
-      if photo.source == 'flickr'
-        c.gravity 'SouthEast'
-        c.pointsize 0.4*font_size
-        draw.call "by #{photo.author}\n#{photo.short_url}", margin, margin
-      end
     end
 
     img
