@@ -1,11 +1,13 @@
 require_relative 'lib/ozorotter'
 require 'active_support/core_ext/time'
 
-task :tweet do
+task :tweet, [:location] do |task, args|
   out_path = 'output/out.jpg'
 
+  attempts_remaining = 5
   begin # Retry until we get an image
-    weather = Ozorotter::WeatherAPI::random_weather
+    location = args[:location] || Ozorotter::WeatherAPI::random_location
+    weather = Ozorotter::WeatherAPI::get_weather location
     text = [
       weather.location,
       "#{weather.temperature_string}",
@@ -15,7 +17,8 @@ task :tweet do
 
     # Is there some way to convert an image to a file without saving and opening it?
     image_data = Ozorotter::image_from_weather weather
-  end until image_data
+    attempts_remaining -= 1
+  end until image_data || attempts_remaining.zero?
   image = image_data[:image]
   image.write out_path
 
@@ -31,7 +34,7 @@ task :tweet do
     else
       "Source: #{meta.image_url} via #{meta.page_url}"
     end
-  sleep rand(5..10)
+  sleep rand(1..5)
   Ozorotter::Twitter.reply tweet, "@#{tweet.user.screen_name} #{credits}", geo
 
   puts
