@@ -3,8 +3,8 @@
 - 'zmw:00000.1.94868'  #Australia / Melbourne
 - 'zmw:00000.1.94767'  #Australia / Sydney
 - 'zmw:00000.1.41923'  #Bangladesh / Dhaka
-- 'zmw:00000.1.83755'  #Brazil / Rio_de_Janeiro
-- 'zmw:00000.1.83780'  #Brazil / Sao_Paulo
+- 'zmw:00000.1.83755'  #Brazil / Rio de Janeiro
+- 'zmw:00000.1.83780'  #Brazil / Sao Paulo
 - 'zmw:00000.1.71877'  #Canada / Calgary
 - 'zmw:00000.1.71265'  #Canada / Toronto
 - 'zmw:00000.1.71627'  #Canada / Montreal
@@ -12,7 +12,7 @@
 - 'zmw:00000.1.06660'  #Switzerland / Zurich
 - 'zmw:00000.1.85574'  #Chile / Santiago
 - 'zmw:00000.1.54511'  #China / Beijing
-- 'zmw:00000.1.45007'  #China / Hong_Kong
+- 'zmw:00000.1.45007'  #China / Hong Kong
 - 'zmw:00000.1.58362'  #China / Shanghai
 - 'zmw:00000.1.80222'  #Colombia / Bogota
 - 'zmw:00000.10.10389' #Germany / Berlin
@@ -27,7 +27,7 @@
 - 'zmw:00000.1.03969'  #Ireland / Dublin
 - 'zmw:00000.18.42809' #India / Calcutta
 - 'zmw:00000.1.43003'  #India / Mumbai
-- 'zmw:00000.1.42181'  #India / New_Delhi
+- 'zmw:00000.1.42181'  #India / New Delhi
 - 'zmw:00000.1.40754'  #Iran / Tehran
 - 'zmw:00000.1.04030'  #Iceland / Reykjavik
 - 'zmw:00000.1.16066'  #Italy / Milan
@@ -57,15 +57,15 @@
 - 'zmw:00000.1.47671'  #Japan / Tokyo
 - 'zmw:00000.1.47670'  #Japan / Yokohama
 - 'zmw:00000.1.47117'  #Korea / Seoul
-- 'zmw:00000.1.76680'  #Mexico / Mexico_City
-- 'zmw:00000.1.48647'  #Malaysia / Kuala_Lumpur
+- 'zmw:00000.1.76680'  #Mexico / Mexico City
+- 'zmw:00000.1.48647'  #Malaysia / Kuala Lumpur
 - 'zmw:00000.1.06240'  #Netherlands / Amsterdam
 - 'zmw:00000.1.93436'  #New Zealand  /  Wellington
 - 'zmw:00000.1.84628'  #Peru / Lima
 - 'zmw:00000.1.98429'  #Phillipines / Manila
 - 'zmw:00000.1.27612'  #Russia / Moscow
-- 'zmw:00000.1.26063'  #Russia / Saint_Petersburg
-- 'zmw:00000.1.68816'  #South Africa / Cape_Town
+- 'zmw:00000.1.26063'  #Russia / Saint Petersburg
+- 'zmw:00000.1.68816'  #South Africa / Cape Town
 - 'zmw:00000.1.48698'  #Singapore / Singapore
 - 'zmw:00000.1.02485'  #Sweden / Stockholm
 - 'zmw:00000.4.48455'  #Thailand / Bangkok
@@ -77,8 +77,8 @@
 - 'zmw:00000.1.03334'  #UK / Manchester
 - 'zmw:99501.1.99999'  #US / AK / Anchorage
 - 'zmw:85001.1.99999'  #US / AZ / Phoenix
-- 'zmw:90001.1.99999'  #US / CA / Los_Angeles
-- 'zmw:94101.1.99999'  #US / CA / San_Francisco
+- 'zmw:90001.1.99999'  #US / CA / Los Angeles
+- 'zmw:94101.1.99999'  #US / CA / San Francisco
 - 'zmw:80202.1.99999'  #US / CO / Denver
 - 'zmw:33010.2.99999'  #US / FL / Miami
 - 'zmw:30301.1.99999'  #US / GA / Atlanta
@@ -86,8 +86,8 @@
 - 'zmw:60290.1.99999'  #US / IL / Chicago
 - 'zmw:02101.1.99999'  #US / MA / Boston
 - 'zmw:48201.1.99999'  #US / MI / Detroit
-- 'zmw:89044.2.99999'  #US / NV / Las_Vegas
-- 'zmw:10001.5.99999'  #US / NY / New_York_City
+- 'zmw:89044.2.99999'  #US / NV / Las Vegas
+- 'zmw:10001.5.99999'  #US / NY / New York City
 - 'zmw:97201.1.99999'  #US / OR / Portland
 - 'zmw:19019.1.99999'  #US / PA / Philadelphia
 - 'zmw:75201.1.99999'  #US / TX / Dallas

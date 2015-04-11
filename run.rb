@@ -4,7 +4,7 @@
 require 'yaml'
 
 recent_path = 'output/recent.yml'
-buffer_size = 6
+buffer_size = 8
 
 recent = File.exists?(recent_path) ? YAML.load_file(recent_path) : []
 locations = YAML.load_file('locations.yml')
