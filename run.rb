@@ -4,7 +4,7 @@
 require 'yaml'
 
 recent_path = 'output/recent.yml'
-buffer_size = 5
+buffer_size = 6
 
 recent = File.exists?(recent_path) ? YAML.load_file(recent_path) : []
 locations = YAML.load_file('locations.yml')
@@ -18,7 +18,7 @@ cmd =
   end
 
 # Run the command, echoing to stdout
-IO.popen("#{cmd} tweet[#{new_location}] 2>&1") do |io|
+IO.popen("#{cmd} tweet['#{new_location}'] 2>&1") do |io|
   while line = io.gets do
     puts line
   end
