@@ -25,7 +25,6 @@ module Ozorotter::Search
 
   def google_search weather, n_tries=5
     query = "#{weather.location} #{google_search_map weather.category} #{weather.time_of_day}"
-    puts "Searching Google: '#{query}'"
 
     n_tries.times do
       begin
@@ -38,9 +37,11 @@ module Ozorotter::Search
         results = Google::Search::Image.new(search_settings).to_a
         results.reject { |r| r.uri.include? 'getty' } # TODO: Put in conf
         return nil if results.empty?
+        puts "Searching Google: #{query} (#{results.length})"
 
         image = results.sample
         uri = results.sample.uri unless results.empty?
+        puts uri
 
         return Ozorotter::PhotoData.new(
           source: 'google',
@@ -70,41 +71,41 @@ module Ozorotter::Search
     }
 
     photos = flickr_search_params params
+    puts "Searching Flickr: #{params[:tags]} (#{photos.length})"
 
     # TODO: Refactor this ugly logic. Please. It's so bad.
     if photos.length < @photos_threshold
-      puts 'Searching without day/night'
       params[:tags] = weather.category
       params.delete :tag_mode
       photos = flickr_search_params params
+      puts "Searching without day/night (#{photos.length})"
     end
 
     if photos.length < @photos_threshold
-      puts 'Searching without group ID'
       params.delete :group_id
       photos = flickr_search_params params
+      puts "Searching without group ID (#{photos.length})"
     end
 
     if photos.length < @photos_threshold
-      puts 'Searching text'
       params.delete :tags
       params.delete :lat
       params.delete :long
 
       params[:text] = "#{weather.location} #{weather.category} #{weather.time_of_day}"
       photos = flickr_search_params params
+      puts "Searching text: #{params[:text]} (#{photos.length})"
     end
 
     if photos.length < @photos_threshold
-      puts 'Giving up and trying Google'
+      # Give up and try Google
       return nil
     end
 
     photo = photos.sample
     url = FlickRaw.url photo
     page_url = FlickRaw.url_photopage(photo)
-    puts photo.inspect
-    puts url, page_url
+    puts %Q{"#{photo.title}" by #{photo.ownername}\n#{page_url}}
 
     Ozorotter::PhotoData.new(
       source: 'flickr',
@@ -117,10 +118,7 @@ module Ozorotter::Search
   end
 
   def flickr_search_params params
-    puts "Searching Flickr: #{params}"
     photos = flickr.photos.search(params).to_a
-    puts "#{photos.length} photos matched."
-    photos
   end
 end
 

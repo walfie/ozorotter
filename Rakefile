@@ -33,6 +33,8 @@ task :tweet do
     end
   sleep rand(5..10)
   Ozorotter::Twitter.reply tweet, "@#{tweet.user.screen_name} #{credits}", geo
+
+  puts
 end
 
 task :test do
