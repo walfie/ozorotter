@@ -37,6 +37,31 @@ task :tweet do
   puts
 end
 
+task :map do
+  tweets = Ozorotter::Twitter.client.user_timeline 'akari_oozora', count: 200, exclude_replies: true
+
+  get_freqs = ->(data) do
+    data
+      .group_by { |x| x }
+      .map { |k,v| { value: k, frequency: v.length } }
+      .sort_by { |x| -x[:frequency] }
+  end
+
+  locations = tweets.map { |t| t.text.split("\n").first unless t.geo.nil? }.compact
+  location_data = get_freqs
+    .call(locations)
+    .map { |x| "#{x[:value]} (#{x[:frequency]})" }
+  puts location_data
+
+  coordinates = tweets.map { |t| t.geo.coordinates.join(',') unless t.geo.nil? }.compact
+  coordinates_data = get_freqs
+    .call(coordinates)
+    .map { |x| "markers=#{x[:value]}" }
+    .take(25)
+  coord_params = coordinates_data.join('&')
+  puts "https://maps.googleapis.com/maps/api/staticmap?size=640x640&#{coord_params}"
+end
+
 task :test do
   out_path = 'output/test.jpg'
 
