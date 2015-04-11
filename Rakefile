@@ -53,13 +53,15 @@ task :map do
     .map { |x| "#{x[:value]} (#{x[:frequency]})" }
   puts location_data
 
-  coordinates = tweets.map { |t| t.geo.coordinates.join(',') unless t.geo.nil? }.compact
+  coordinates = tweets.map do |t|
+    t.geo.coordinates.map{|x| x.round(2)}.join(',') unless t.geo.nil?
+  end.compact
+
   coordinates_data = get_freqs
     .call(coordinates)
     .map { |x| "markers=#{x[:value]}" }
-    .take(25)
   coord_params = coordinates_data.join('&')
-  puts "https://maps.googleapis.com/maps/api/staticmap?size=640x640&#{coord_params}"
+  puts "https://maps.googleapis.com/maps/api/staticmap?size=640x640&center=0,0&#{coord_params}"
 end
 
 task :test do
