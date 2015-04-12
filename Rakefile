@@ -30,7 +30,11 @@ task :tweet, [:location] do |task, args|
   meta = image_data[:meta]
   credits =
     if meta.source == 'flickr'
-      %Q{Source: "#{meta.title}" by #{meta.author} on Flickr\n#{meta.page_url}}
+      source = %Q{Source: "#{meta.title}" by #{meta.author} on Flickr\n#{meta.page_url}}
+      if source.length > 125 # Too long to fit in a tweet
+        source = %Q{Source: by #{meta.author} on Flickr\n#{meta.page_url}}
+      end
+      source
     else
       "Source: #{meta.image_url} via #{meta.page_url}"
     end
