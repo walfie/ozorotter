@@ -6,9 +6,11 @@
 - 'zmw:00000.1.83755'  #Brazil / Rio de Janeiro
 - 'zmw:00000.1.83780'  #Brazil / Sao Paulo
 - 'zmw:00000.1.71877'  #Canada / Calgary
+- 'zmw:00000.1.71123'  #Canada / Edmonton
 - 'zmw:00000.1.71265'  #Canada / Toronto
 - 'zmw:00000.1.71627'  #Canada / Montreal
 - 'zmw:00000.1.71892'  #Canada / Vancouver
+- 'zmw:00000.1.71852'  #Canada / Winnipeg
 - 'zmw:00000.1.06660'  #Switzerland / Zurich
 - 'zmw:00000.1.85574'  #Chile / Santiago
 - 'zmw:00000.1.54511'  #China / Beijing
@@ -17,18 +19,13 @@
 - 'zmw:00000.1.80222'  #Colombia / Bogota
 - 'zmw:00000.10.10389' #Germany / Berlin
 - 'zmw:00000.1.10637'  #Germany / Frankfurt
-- 'zmw:00000.1.62366'  #Egypt / Cairo
-- 'zmw:00000.1.08181'  #Spain / Barcelona
-- 'zmw:00000.1.08221'  #Spain / Madrid
+- 'zmw:00000.1.07650'  #France / Marseille
 - 'zmw:00000.37.07156' #France / Paris
-- 'zmw:00000.1.04250'  #Greenland / Nuuk
 - 'zmw:00000.1.16716'  #Greece / Athens
 - 'zmw:00000.2.96745'  #Indonesia / Jakarta
 - 'zmw:00000.1.03969'  #Ireland / Dublin
 - 'zmw:00000.18.42809' #India / Calcutta
 - 'zmw:00000.1.43003'  #India / Mumbai
-- 'zmw:00000.1.42181'  #India / New Delhi
-- 'zmw:00000.1.40754'  #Iran / Tehran
 - 'zmw:00000.1.04030'  #Iceland / Reykjavik
 - 'zmw:00000.1.16066'  #Italy / Milan
 - 'zmw:00000.1.16240'  #Italy / Rome
@@ -63,15 +60,19 @@
 - 'zmw:00000.1.93436'  #New Zealand  /  Wellington
 - 'zmw:00000.1.84628'  #Peru / Lima
 - 'zmw:00000.1.98429'  #Phillipines / Manila
+- 'zmw:00000.1.08536'  #Portugal / Lisbon
 - 'zmw:00000.1.27612'  #Russia / Moscow
 - 'zmw:00000.1.26063'  #Russia / Saint Petersburg
 - 'zmw:00000.1.68816'  #South Africa / Cape Town
 - 'zmw:00000.1.48698'  #Singapore / Singapore
+- 'zmw:00000.1.08181'  #Spain / Barcelona
+- 'zmw:00000.1.08221'  #Spain / Madrid
 - 'zmw:00000.1.02485'  #Sweden / Stockholm
 - 'zmw:00000.4.48455'  #Thailand / Bangkok
 - 'zmw:00000.1.17060'  #Turkey / Istanbul
 - 'zmw:00000.1.58968'  #Taiwan / Taipei
 - 'zmw:00000.1.41194'  #United Arab Emigrates / Dubai
+- 'zmw:00000.1.03534'  #UK / Birmingham
 - 'zmw:00000.1.03140'  #UK / Glasgow
 - 'zmw:00000.1.03772'  #UK / London
 - 'zmw:00000.1.03334'  #UK / Manchester
