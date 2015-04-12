@@ -16,11 +16,13 @@ module Ozorotter::Search
     mappings = {
       'rain' => 'rainy',
       'snow' => 'snow OR snowy',
-      'storm' => 'storm -snow',
+      'storm' => 'storm',
       'clear' => 'clear sky',
       'fog' => 'fog OR foggy'
     }
-    mappings[search_term] || search_term
+    term = mappings[search_term] || search_term
+    term += ' -snow' unless term.include?('snow')
+    term
   end
 
   def google_search weather, n_tries=5
