@@ -115,7 +115,7 @@ module Ozorotter::Search
       page_url: page_url,
       short_url: "http://flic.kr/p/#{FlickRaw.base58 photo.id}",
       author: photo.ownername,
-      title: photo.title
+      title: (photo.title.to_s.empty? ? 'Untitled' : photo.title)
     )
   end
 
