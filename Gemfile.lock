@@ -9,6 +9,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.3.6)
     buftok (0.2.0)
+    diff-lcs (1.2.5)
     dotenv (2.0.1)
     equalizer (0.0.9)
     faraday (0.9.0)
@@ -28,6 +29,19 @@ GEM
     multipart-post (2.0.0)
     naught (1.0.0)
     rake (10.4.2)
+    rspec (3.2.0)
+      rspec-core (~> 3.2.0)
+      rspec-expectations (~> 3.2.0)
+      rspec-mocks (~> 3.2.0)
+    rspec-core (3.2.3)
+      rspec-support (~> 3.2.0)
+    rspec-expectations (3.2.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.2.0)
+    rspec-mocks (3.2.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.2.0)
+    rspec-support (3.2.2)
     simple_oauth (0.3.0)
     thread_safe (0.3.5)
     twitter (5.13.0)
@@ -54,4 +68,5 @@ DEPENDENCIES
   google-search
   mini_magick
   rake
+  rspec
   twitter

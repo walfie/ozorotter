@@ -9,3 +9,7 @@ gem 'mini_magick'
 gem 'rake'
 gem 'twitter'
 
+group :test do
+  gem 'rspec'
+end
+
