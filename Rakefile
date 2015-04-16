@@ -36,7 +36,8 @@ task :tweet, [:location] do |task, args|
       if source.length > 100
         source = %Q{Source: Photo by #{meta.author} on Flickr}
       end
-      source + "\n#{meta.page_url}"
+      source += "\n#{meta.page_url}"
+      source.gsub('@', ' ')
     else
       "Source: #{meta.image_url} via #{meta.page_url}"
     end
