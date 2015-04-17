@@ -12,6 +12,10 @@ module Ozorotter
       f = fahrenheit.round(precision).to_s + '°F'
       c + ' | ' + f
     end
+
+    def ==(obj)
+      obj.class == self.class && obj.celsius == self.celsius
+    end
   end
 end
 

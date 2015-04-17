@@ -7,6 +7,7 @@ RSpec.describe Ozorotter::Weather do
       opts = {
         description: 'Rainy',
         icon: 'http://example.com/image.png',
+        humidity: '50%',
         location: double('location'),
         temperature: double('temperature'),
         time: Time.new
@@ -24,7 +25,7 @@ RSpec.describe Ozorotter::Weather do
     context 'time is defined' do
       subject(:weather) do
         time = Time.utc(2015, 4, 16, 3, 8).in_time_zone('America/New_York')
-        weather = Ozorotter::Weather.new(time: time)
+        Ozorotter::Weather.new(time: time)
       end
 
       it 'returns the date in the appropriate format' do

@@ -25,5 +25,32 @@ RSpec.describe Ozorotter::Temperature do
       end
     end
   end
+
+  describe '#==' do
+    subject(:temp) { Ozorotter::Temperature.new(3.1415) }
+
+    context 'when same celsius' do
+      it 'returns true' do
+        new_temp = Ozorotter::Temperature.new(3.1415)
+        expect(temp == new_temp).to be(true)
+      end
+    end
+
+    context 'when different celsius' do
+      it 'returns false' do
+        new_temp = Ozorotter::Temperature.new(1.23)
+        expect(temp == new_temp).to be(false)
+      end
+    end
+
+    context 'when different class' do
+      require 'ostruct'
+
+      it 'returns false' do
+        new_temp = OpenStruct.new(celsius:3.1415)
+        expect(temp == new_temp).to be(false)
+      end
+    end
+  end
 end
 
