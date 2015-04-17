@@ -4,8 +4,10 @@ module ObjectFromHash
   def initialize(opts={})
     @fields = {}
     opts.each do |k,v|
-      instance_variable_set("@#{k}", v)
-      @fields[k] = v
+      if self.respond_to?(k)
+        instance_variable_set("@#{k}", v)
+        @fields[k] = v
+      end
     end
   end
 
