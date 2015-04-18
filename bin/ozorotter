@@ -1,0 +1,73 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'yaml'
+require 'dotenv'
+
+$LOAD_PATH.unshift('lib')
+require 'ozorotter'
+
+# Default options
+location = nil
+options = {
+  config: 'config.yml',
+  output: 'output/out.jpg',
+  tweet: false
+}
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: ozorotter [location] [options]"
+
+  opts.on('-c', '--config CONFIG_PATH',
+          'Specify config yml file (default `config.yml`)') do |c|
+    options[:config] = c
+  end
+
+  opts.on('-o', '--output OUTPUT_PATH',
+          'Specify output directory (default `output/out.jpg`)') do |o|
+    options[:output] = o
+  end
+
+  opts.on('-t', '--[no-]tweet',
+          'Tweet the image using the keys specified in ENV (default false)') do |t|
+    options[:tweet] = t
+  end
+
+  opts.on('-r', '--random-location [LOCATIONS_PATH]',
+          'Choose random location from locations yml file (default `locations.yml`)') do |locations_file|
+    locations = YAML.load_file(locations_file || 'locations.yml')
+    location = locations.sample
+  end
+end.parse!
+
+location ||= ARGV.pop
+raise 'Location must be specified' unless location
+
+#======#
+# Main #
+#======#
+Dotenv.load
+
+config = YAML.load_file(options[:config])
+
+# Initialize services
+flickr_keys = { api_key: ENV['FLICKR_KEY'], shared_secret: ENV['FLICKR_SECRET'] }
+flickr = Ozorotter::Dal::Flickr.build(flickr_keys, config['flickr'])
+
+google = Ozorotter::Dal::GoogleImages.new
+
+wunderground = Ozorotter::Dal::Wunderground.new(ENV['WUNDERGROUND_KEY'])
+
+image_composer = Ozorotter::ImageComposer.new(config['image'])
+
+ozorotter = Ozorotter::Client.new do |o|
+  o.image_searcher = flickr
+  o.fallback_image_searcher = google
+  o.weather_api = wunderground
+  o.image_composer = image_composer
+end
+
+# Get the image
+image_data = ozorotter.image_from_location(location, options[:output])
+
+# TODO: Handle tweeting
+
