@@ -8,6 +8,11 @@ module Ozorotter
 
     alias_method :latitude, :lat
     alias_method :longitude, :long
+
+    def initialize(opts={})
+      defaults = { lat: 0, long: 0, name: '' }
+      super(defaults.merge(opts))
+    end
   end
 end
 

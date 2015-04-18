@@ -1,3 +1,5 @@
+require 'ozorotter/location'
+require 'ozorotter/temperature'
 require 'ozorotter/util/object_from_hash'
 
 module Ozorotter
@@ -5,6 +7,15 @@ module Ozorotter
     include ObjectFromHash
 
     attr_reader :description, :icon, :humidity, :location, :temperature, :time
+
+    def initialize(opts={})
+      defaults = {
+        description: '',
+        location: Ozorotter::Location.new,
+        temperature: Ozorotter::Temperature.new(0)
+      }
+      super(defaults.merge(opts))
+    end
 
     # Human-readable time, including time zone and day of week
     def time_string

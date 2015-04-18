@@ -71,7 +71,7 @@ module Ozorotter::Dal
     end
 
     def search_with_params(params)
-      flickr.photos.search(params).to_a
+      @flickr.photos.search(params).to_a
     end
 
     #
