@@ -1,3 +1,5 @@
+require 'ozorotter/location'
+require 'ozorotter/temperature'
 require 'ozorotter/weather'
 
 require 'active_support/core_ext/time'

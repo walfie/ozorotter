@@ -53,7 +53,7 @@ module Ozorotter::Dal
         end
       end
 
-      raise "Image search failed #{n_tries} times in a row"
+      nil # Give up
     end
   end
 end
