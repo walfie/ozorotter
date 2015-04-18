@@ -14,6 +14,7 @@ options = {
   tweet: false
 }
 
+ARGV << '-h' if ARGV.empty?
 optparse = OptionParser.new do |opts|
   opts.banner = "Usage: ozorotter [location] [options]"
 
@@ -36,6 +37,11 @@ optparse = OptionParser.new do |opts|
           'Choose random location from locations yml file (default `locations.yml`)') do |locations_file|
     locations = YAML.load_file(locations_file || 'locations.yml')
     location = locations.sample
+  end
+
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
   end
 end.parse!
 
