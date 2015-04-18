@@ -75,5 +75,4 @@ end
 # Get the image
 image_data = ozorotter.image_from_location(location, options[:output])
 
-# TODO: Handle tweeting
-
+exit unless options[:tweet]

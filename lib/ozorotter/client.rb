@@ -32,7 +32,7 @@ module Ozorotter
 
       image.write(save_location) unless save_location.nil?
 
-      ImageData.new(image: image, photo: photo)
+      ImageData.new(image: image, photo: photo, weather: weather)
     end
   end
 end
