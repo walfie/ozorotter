@@ -36,36 +36,14 @@ module Ozorotter::Dal
     def search(weather)
       params = params_from_weather(weather)
 
-      photos = search_with_params(params)
-      puts "Searching Flickr: #{params[:tags]} (#{photos.length})" if @logging_enabled
+      # Keep trying until one of the API calls returns enough photos
+      photos =
+        search_with_tags(params) ||
+        search_without_time_of_day!(weather, params) ||
+        search_without_group_id!(params) ||
+        search_without_tags!(weather, params)
 
-      # TODO: Refactor this ugly logic. Please. It's so bad. Difficult to test.
-      if photos.length < @photos_threshold
-        params[:tags] = weather.category
-        params.delete(:tag_mode)
-        photos = search_with_params(params)
-        puts "Searching without day/night (#{photos.length})" if @logging_enabled
-      end
-
-      if photos.length < @photos_threshold
-        params.delete(:group_id)
-        photos = search_with_params(params)
-        puts "Searching without group ID (#{photos.length})" if @logging_enabled
-      end
-
-      if photos.length < @photos_threshold
-        params.delete(:tags)
-        params.delete(:lat)
-        params.delete(:long)
-
-        params[:text] = "#{weather.location.name} #{weather.category} #{weather.time_of_day}"
-        photos = search_with_params(params)
-        puts "Searching text: #{params[:text]} (#{photos.length})" if @logging_enabled
-      end
-
-      if photos.length < @photos_threshold
-        return nil # Give up
-      end
+      return nil if photos.nil?
 
       flickr_photo = photos.sample
       photo = Ozorotter::Photo.from_flickr_photo(flickr_photo)
@@ -75,11 +53,8 @@ module Ozorotter::Dal
       photo
     end
 
-    private
-    def search_with_params(params)
-      flickr.photos.search(params).to_a
-    end
 
+    private
     def params_from_weather(weather)
       {
         lat: weather.location.lat.to_s,
@@ -93,6 +68,55 @@ module Ozorotter::Dal
         license: @config[:licenses],
         group_id: @config[:group_id],
       }
+    end
+
+    def search_with_params(params)
+      flickr.photos.search(params).to_a
+    end
+
+    #
+    # Convenience methods for retrying if not enough photos returned
+    # Note that they modify the params hash that is passed in.
+    #
+    def length_check(photos)
+      photos.length < @photos_threshold ? nil : photos
+    end
+
+    def search_with_tags(params)
+      photos = search_with_params(params)
+      puts "Searching Flickr: #{params[:tags]} (#{photos.length})" if @logging_enabled
+
+      length_check(photos)
+    end
+
+    def search_without_time_of_day!(weather, params)
+      params[:tags] = weather.category
+      params.delete(:tag_mode)
+      photos = search_with_params(params)
+      puts "Searching without day/night (#{photos.length})" if @logging_enabled
+
+      length_check(photos)
+      photos.length < @photos_threshold ? nil : photos
+    end
+
+    def search_without_group_id!(params)
+      params.delete(:group_id)
+      photos = search_with_params(params)
+      puts "Searching without group ID (#{photos.length})" if @logging_enabled
+
+      length_check(photos)
+    end
+
+    def search_without_tags!(weather, params)
+      params.delete(:tags)
+      params.delete(:lat)
+      params.delete(:long)
+
+      params[:text] = "#{weather.location.name} #{weather.category} #{weather.time_of_day}"
+      photos = search_with_params(params)
+      puts "Searching text: #{params[:text]} (#{photos.length})" if @logging_enabled
+
+      length_check(photos)
     end
   end
 end

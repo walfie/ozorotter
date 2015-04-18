@@ -48,5 +48,3 @@ RSpec.describe Ozorotter::Photo do
   end
 end
 
-
-
