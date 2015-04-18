@@ -1,0 +1,99 @@
+require 'ozorotter/photo'
+require 'ozorotter/weather'
+
+require 'active_support/core_ext/hash/keys'
+require 'flickraw'
+
+module Ozorotter::Dal
+  class Flickr
+
+    # Initialize object with API keys.
+    #
+    # See `#initialize` for possible config values
+    def self.build(keys={}, config={}, logging_enabled=true)
+      FlickRaw.api_key = keys[:api_key]
+      FlickRaw.shared_secret = keys[:shared_secret]
+      flickr = FlickRaw::Flickr.new
+
+      Flickr.new(flickr, config, logging_enabled)
+    end
+
+    # Initialize with flickr object (see `#build` to initialize with keys)
+    #
+    # Config object can contain the following keys:
+    #   :accuracy, :radius, :licenses, :group_id (Flickr API)
+    #   :photos_threshold (Minimum number of photos, else search returns nil)
+    #
+    # See Flickr's API documentation for valid values.
+    # https://www.flickr.com/services/api/flickr.photos.search.html
+    def initialize(flickr, config={}, logging_enabled=true)
+      @flickr = flickr
+      @config = config.symbolize_keys
+      @photos_threshold = @config[:photos_threshold] || 10
+      @logging_enabled = logging_enabled
+    end
+
+    def search(weather)
+      params = params_from_weather(weather)
+
+      photos = search_with_params(params)
+      puts "Searching Flickr: #{params[:tags]} (#{photos.length})" if @logging_enabled
+
+      # TODO: Refactor this ugly logic. Please. It's so bad. Difficult to test.
+      if photos.length < @photos_threshold
+        params[:tags] = weather.category
+        params.delete(:tag_mode)
+        photos = search_with_params(params)
+        puts "Searching without day/night (#{photos.length})" if @logging_enabled
+      end
+
+      if photos.length < @photos_threshold
+        params.delete(:group_id)
+        photos = search_with_params(params)
+        puts "Searching without group ID (#{photos.length})" if @logging_enabled
+      end
+
+      if photos.length < @photos_threshold
+        params.delete(:tags)
+        params.delete(:lat)
+        params.delete(:long)
+
+        params[:text] = "#{weather.location.name} #{weather.category} #{weather.time_of_day}"
+        photos = search_with_params(params)
+        puts "Searching text: #{params[:text]} (#{photos.length})" if @logging_enabled
+      end
+
+      if photos.length < @photos_threshold
+        return nil # Give up
+      end
+
+      flickr_photo = photos.sample
+      photo = Ozorotter::Photo.from_flickr_photo(flickr_photo)
+
+      puts %Q{"#{photo.title}" by #{photo.author}\n#{photo.page_url}} if @logging_enabled
+
+      photo
+    end
+
+    private
+    def search_with_params(params)
+      flickr.photos.search(params).to_a
+    end
+
+    def params_from_weather(weather)
+      {
+        lat: weather.location.lat.to_s,
+        lon: weather.location.long.to_s,
+        tags: "#{weather.category},#{weather.time_of_day}",
+        tag_mode: 'all',
+        extras: 'owner_name',
+        safe_search: 1,
+        accuracy: @config[:accuracy],
+        radius: @config[:radius],
+        license: @config[:licenses],
+        group_id: @config[:group_id],
+      }
+    end
+  end
+end
+
