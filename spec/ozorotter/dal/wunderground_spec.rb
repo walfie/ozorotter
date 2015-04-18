@@ -1,10 +1,10 @@
-require 'ozorotter/dal/wunderground_dao'
+require 'ozorotter/dal/wunderground'
 
-RSpec.describe Ozorotter::Dal::WundergroundDao do
-  WundergroundDao = Ozorotter::Dal::WundergroundDao
+RSpec.describe Ozorotter::Dal::Wunderground do
+  Wunderground = Ozorotter::Dal::Wunderground
 
   describe '#get_weather' do
-    let(:dao) { WundergroundDao.new('dummy_api_key', false) }
+    let(:dao) { Wunderground.new('dummy_api_key', false) }
 
     it 'correctly parses the JSON' do
       json = %q({

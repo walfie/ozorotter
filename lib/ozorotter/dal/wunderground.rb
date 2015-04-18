@@ -6,9 +6,7 @@ require 'net/http'
 require 'uri'
 
 module Ozorotter::Dal
-  class WundergroundDao
-    attr_reader :api_key
-
+  class Wunderground
     def initialize(api_key, logging_enabled=true)
       @api_key = api_key
       @logging_enabled = logging_enabled
@@ -25,7 +23,7 @@ module Ozorotter::Dal
 
     private
     def get_api_url(location_id)
-      "http://api.wunderground.com/api/#{api_key}/conditions/q/#{location_id}.json"
+      "http://api.wunderground.com/api/#{@api_key}/conditions/q/#{location_id}.json"
     end
 
     def get_json(url)
