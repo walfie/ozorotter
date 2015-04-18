@@ -1,3 +1,5 @@
+require 'ozorotter/image_data'
+
 module Ozorotter
   class Client
     attr_accessor :image_searcher, :fallback_image_searcher, :weather_api, :image_composer
@@ -29,6 +31,8 @@ module Ozorotter
       image = image_composer.compose_image(weather, overlay, photo)
 
       image.write(save_location) unless save_location.nil?
+
+      ImageData.new(image: image, photo: photo)
     end
   end
 end
