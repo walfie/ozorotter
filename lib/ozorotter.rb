@@ -8,5 +8,6 @@ require 'ozorotter/weather'
 
 require 'ozorotter/dal/flickr'
 require 'ozorotter/dal/google_images'
+require 'ozorotter/dal/twitter'
 require 'ozorotter/dal/wunderground'
 

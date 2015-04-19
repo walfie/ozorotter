@@ -47,6 +47,8 @@ module Ozorotter::Dal
         long: observation['display_location']['longitude']
       )
 
+      puts "Visiting #{location.name}..." if @logging_enabled
+
       temperature = Ozorotter::Temperature.new(observation['temp_c'])
 
       Ozorotter::Weather.new(
