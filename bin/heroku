@@ -40,7 +40,7 @@ locations = YAML.load_file(options[:locations_path])
 new_location = (locations - recent).sample
 
 # Run the command, echoing to stdout
-IO.popen("heroku run 'ruby /bin/ozorotter #{new_location} -t' 2>&1") do |io|
+IO.popen("heroku run 'ruby ./bin/ozorotter #{new_location} -t' 2>&1") do |io|
   while line = io.gets do
     puts line
   end
