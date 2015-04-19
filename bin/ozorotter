@@ -97,3 +97,5 @@ end
 oozorakko = Ozorotter::Dal::Twitter.new(client_oozorakko)
 oozorakko.tweet_source(tweet, image_data)
 
+puts
+
