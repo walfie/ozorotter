@@ -29,8 +29,8 @@ module Ozorotter::Dal
         if source.length > 100
           source = %Q{Source: Photo by #{photo.author} on Flickr}
         end
+        source.gsub!('@', ' ')
         source += "\n#{photo.page_url}"
-        source.gsub('@', ' ')
       else
         "Source: #{photo.image_url} via #{photo.page_url}"
       end
