@@ -1,7 +1,12 @@
+require 'ozorotter/location'
+require 'ozorotter/temperature'
+require 'ozorotter/weather'
+require 'ozorotter/errors'
+
 require 'active_support/inflector/methods' # titleize
 require 'json'
+require 'open-uri'
 require 'net/http'
-require 'uri'
 
 module Ozorotter::Dal
   class OpenWeatherMap
@@ -10,17 +15,25 @@ module Ozorotter::Dal
       @logging_enabled = logging_enabled
     end
 
-    def get_weather(search)
-      url = get_api_url(search)
+    def get_weather(location_name, n_tries=5)
+      url = get_api_url(location_name)
       json = get_json(url)
 
       puts url if @logging_enabled
 
       parse_api_response(json)
+    rescue Ozorotter::Errors::ServerError => e
+      puts "'#{location_name}' 500 error, #{n_tries} retries left" if @logging_enabled
+      retry unless (n_tries -=1).zero?
     end
 
     # Parse the response hash of the OpenWeatherMap JSON
     def parse_api_response(json)
+      if json['cod'] == '404'
+        # The API doesn't properly respond with a 404 status, we have to check the JSON
+        raise Ozorotter::Errors::NotFoundError.new, '404 error'
+      end
+
       time = nil # TODO: Handle timezones?
 
       coord = json['coord']
@@ -67,9 +80,23 @@ module Ozorotter::Dal
     end
 
     def get_json(url)
-      # TODO: Error handling
       uri = URI.parse(url)
-      body = Net::HTTP.get(uri)
+
+      http = Net::HTTP.new(uri.host)
+      request = Net::HTTP::Get.new(uri.request_uri)
+
+      response = http.request(request)
+
+      body =
+        case response.code
+        when 404 # Actually, the API currently returns a 200 when not found...
+          raise Ozorotter::Errors::NotFoundError.new(url), '404 error'
+        when 500
+          raise Ozorotter::Errors::ServerError.new(url), '500 error'
+        else
+          response.body
+        end
+
       JSON.parse(body)
     end
 
