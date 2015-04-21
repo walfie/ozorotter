@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+# Run on Heroku, keeping a local copy of recently-used locations
+# (Heroku doesn't have persistent file storage)
+require 'optparse'
+require 'yaml'
+
+options = {
+  buffer_size: 8,
+  recent_path: 'output/recent.yml',
+  locations_path: 'locations.yml'
+}
+
+# Parse options
+optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: ./heroku [options]"
+
+  opts.on('-s', '--size BUFFER_SIZE',
+          'number of locations to keep (default 8)') do |s|
+    options[:buffer_size] = s
+  end
+
+  opts.on('-r', '--recent-file RECENT_YML_PATH',
+          'file to use for recent locations (default `output/recent.yml`)') do |r|
+    options[:recent_path] = r
+  end
+
+  opts.on('-l', '--locations-file LOCATIONS_YML_PATH',
+          'locations file to pick from (default `locations.yml`)') do |locations_file|
+    options[:locations_path] = locations_file
+  end
+
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+end.parse!
+
+recent = File.exists?(options[:recent_path]) ? YAML.load_file(options[:recent_path]) : []
+locations = YAML.load_file(options[:locations_path])
+new_location = (locations - recent).sample
+
+# Run the command, echoing to stdout
+IO.popen("heroku run 'ruby ./bin/ozorotter #{new_location} -t' 2>&1") do |io|
+  while line = io.gets do
+    puts line
+  end
+end
+
+# Update the recent locations
+recent = recent.unshift(new_location).take(options[:buffer_size])
+File.open(options[:recent_path], 'w') do |f|
+  f.write(recent.to_yaml)
+end
+
