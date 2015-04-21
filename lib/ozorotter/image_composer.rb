@@ -15,7 +15,7 @@ module Ozorotter
       sub_dir =
         if weather.category =~ /rain|storm/
           'rainy'
-        elsif weather.time.hour < 6
+        elsif weather.time && weather.time.hour < 6
           '{sleepy,default}'
         else
           'default'

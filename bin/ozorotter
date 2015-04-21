@@ -12,7 +12,8 @@ location = nil
 options = {
   config: 'config.yml',
   output: 'output/out.jpg',
-  tweet: false
+  tweet: false,
+  weather_api: 'wunderground'
 }
 
 ARGV << '-h' if ARGV.empty?
@@ -35,9 +36,16 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('-r', '--random-location [LOCATIONS_PATH]',
-          'Choose random location from locations yml file (default `locations.yml`)') do |locations_file|
+          'Choose random location from locations yml file',
+          '(default `locations.yml`)') do |locations_file|
     locations = YAML.load_file(locations_file || 'locations.yml')
     location = locations.sample
+  end
+
+  opts.on('-w', '--weather-api WEATHER_API', [:wunderground, :openweathermap],
+          'Specify which weather API to use.',
+          'Either wunderground or openweathermap. (default wunderground)') do |w|
+    options[:weather_api] = w
   end
 
   opts.on_tail("-h", "--help", "Show this message") do
@@ -62,14 +70,25 @@ flickr = Ozorotter::Dal::Flickr.build(flickr_keys, config['flickr'])
 
 google = Ozorotter::Dal::GoogleImages.new
 
-wunderground = Ozorotter::Dal::Wunderground.new(ENV['WUNDERGROUND_KEY'])
+weather_api =
+  case options[:weather_api]
+  when :wunderground
+    Ozorotter::Dal::Wunderground.new(ENV['WUNDERGROUND_KEY'])
+  when :openweathermap
+    Ozorotter::Dal::OpenWeatherMap.new(ENV['OPENWEATHERMAP_KEY'])
+  else
+    raise [
+      "Invalid weather api specified (#{options[:weather_api]}).",
+      'Must be either wunderground or openweathermap.'
+    ].join(' ')
+  end
 
 image_composer = Ozorotter::ImageComposer.new(config['image'])
 
 ozorotter = Ozorotter::Client.new do |o|
   o.image_searcher = flickr
   o.fallback_image_searcher = google
-  o.weather_api = wunderground
+  o.weather_api = weather_api
   o.image_composer = image_composer
 end
 

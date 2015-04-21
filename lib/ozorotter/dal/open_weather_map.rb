@@ -40,7 +40,7 @@ module Ozorotter::Dal
 
       Ozorotter::Weather.new(
         temperature: temperature,
-        description: weather_json['description'].titleize,
+        description: weather_description(weather_json['description']),
         humidity: "#{json['main']['humidity']}%",
         icon: icon,
         location: location,
@@ -50,8 +50,16 @@ module Ozorotter::Dal
     end
 
     private
+    # Titlecase weather description and various other filtering
+    def weather_description(description)
+      # Add other sanitization things here if necessary
+      # This one gets rid of "Sky Is Clear" which looks kinda weird
+      description.downcase.gsub('sky is ', '').titleize
+    end
+
     def get_api_url(location)
-      "http://api.openweathermap.org/data/2.5/find?APPID=#{@api_key}&units=metric&q=#{location}"
+      escaped_location = URI.escape(location)
+      "http://api.openweathermap.org/data/2.5/weather?APPID=#{@api_key}&units=metric&q=#{escaped_location}"
     end
 
     def icon_url(filename)

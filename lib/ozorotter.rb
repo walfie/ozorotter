@@ -9,5 +9,6 @@ require 'ozorotter/weather'
 require 'ozorotter/dal/flickr'
 require 'ozorotter/dal/google_images'
 require 'ozorotter/dal/twitter'
+require 'ozorotter/dal/open_weather_map'
 require 'ozorotter/dal/wunderground'
 
