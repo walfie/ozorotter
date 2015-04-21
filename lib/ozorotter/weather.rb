@@ -12,7 +12,8 @@ module Ozorotter
       defaults = {
         description: '',
         location: Ozorotter::Location.new,
-        temperature: Ozorotter::Temperature.new(0)
+        temperature: Ozorotter::Temperature.new(0),
+        time_of_day: nil
       }
       super(defaults.merge(opts))
     end
@@ -23,9 +24,13 @@ module Ozorotter
       time.strftime "%a %-I:%M%p (%Z)\n%Y/%m/%d"
     end
 
+    # If @time_of_day is set (in the initializer), return that value.
+    #
+    # Otherwise:
     # Returns 'day' or 'night' (or `nil` if `time` is `nil`)
     # Considers 6:00am to 6:59pm to be daytime, otherwise nighttime
     def time_of_day
+      return @time_of_day if @time_of_day
       return nil if time.nil?
 
       time.hour.between?(6, 18) ? 'day' : 'night'

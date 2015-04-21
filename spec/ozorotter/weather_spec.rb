@@ -43,29 +43,39 @@ RSpec.describe Ozorotter::Weather do
   end
 
   describe '#time_of_day' do
-    cases = [
-      { given: Time.utc(2015, 4, 15,  5, 59), expect: 'night'},
-      { given: Time.utc(2015, 4, 15,  6,  0), expect: 'day'},
-      { given: Time.utc(2015, 4, 15, 18, 59), expect: 'day'},
-      { given: Time.utc(2015, 4, 15, 19,  0), expect: 'night'}
-    ]
+    context '@time_of_day is nil' do
+      cases = [
+        { given: Time.utc(2015, 4, 15,  5, 59), expect: 'night'},
+        { given: Time.utc(2015, 4, 15,  6,  0), expect: 'day'},
+        { given: Time.utc(2015, 4, 15, 18, 59), expect: 'day'},
+        { given: Time.utc(2015, 4, 15, 19,  0), expect: 'night'}
+      ]
 
-    cases.each do |c|
-      context "when time is #{c[:given]}" do
-        subject(:weather) { Ozorotter::Weather.new(time: c[:given]) }
+      cases.each do |c|
+        context "when time is #{c[:given]}" do
+          subject(:weather) { Ozorotter::Weather.new(time: c[:given]) }
 
-        it "returns #{c[:expect]}" do
-          expect(weather.time_of_day).to eq(c[:expect])
+          it "returns #{c[:expect]}" do
+            expect(weather.time_of_day).to eq(c[:expect])
+          end
+        end
+      end
+
+      context 'time is nil' do
+        subject(:weather) { Ozorotter::Weather.new }
+
+        it 'returns nil' do
+          expect(weather.time_of_day).to be_nil
         end
       end
     end
+  end
 
-    context 'time is nil' do
-      subject(:weather) { Ozorotter::Weather.new }
+  context '@time_of_day is not nil' do
+    subject(:weather) { Ozorotter::Weather.new(time_of_day: 'whatever you want') }
 
-      it 'returns nil' do
-        expect(weather.time_of_day).to be_nil
-      end
+    it 'returns @time_of_day' do
+      expect(weather.time_of_day).to eq('whatever you want')
     end
   end
 
