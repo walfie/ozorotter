@@ -10,7 +10,7 @@ module Ozorotter::Dal
     end
 
     def tweet_image(image_data)
-      text = text_from_weather(image_data.weather)
+      text = image_data.weather.to_s
       file = open(image_data.image_path)
       geo = geo_from_location(image_data.weather.location)
 
@@ -46,7 +46,7 @@ module Ozorotter::Dal
       begin
         @client.update_with_media(text, file, options)
       rescue Twitter::Error::RequestTimeout
-        sleep 15
+        sleep 5
         retry
       end
     end
@@ -60,15 +60,6 @@ module Ozorotter::Dal
         lat: location.lat.to_f,
         long: location.long.to_f
       }
-    end
-
-    def text_from_weather weather
-      [
-        weather.location.name,
-        "#{weather.temperature.to_s}",
-        "Humidity: #{weather.humidity}",
-        weather.description
-      ].join("\n")
     end
   end
 end

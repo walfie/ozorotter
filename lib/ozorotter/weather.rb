@@ -50,6 +50,15 @@ module Ozorotter
         else description.downcase
         end
     end
+
+    def to_s
+      [
+        location.name,
+        "#{temperature.to_s}",
+        "Humidity: #{humidity}",
+        description
+      ].join("\n")
+    end
   end
 end
 
