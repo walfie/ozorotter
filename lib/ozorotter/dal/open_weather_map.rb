@@ -88,10 +88,10 @@ module Ozorotter::Dal
       response = http.request(request)
 
       body =
-        case response.code
-        when 404 # Actually, the API currently returns a 200 when not found...
+        case response.code.to_s
+        when '404' # Actually, the API currently returns a 200 when not found...
           raise Ozorotter::Errors::NotFoundError.new(url), '404 error'
-        when 500
+        when '500'
           raise Ozorotter::Errors::ServerError.new(url), '500 error'
         else
           response.body

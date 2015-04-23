@@ -1,4 +1,5 @@
 require 'ozorotter/client'
+require 'ozorotter/errors'
 
 require 'ozorotter/image_composer'
 require 'ozorotter/location'
