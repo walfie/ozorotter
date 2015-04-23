@@ -13,3 +13,4 @@ require 'ozorotter/dal/twitter'
 require 'ozorotter/dal/open_weather_map'
 require 'ozorotter/dal/wunderground'
 
+require 'ozorotter/bot/weather_bot'

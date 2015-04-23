@@ -7,6 +7,7 @@ require 'active_support/inflector/methods' # titleize
 require 'json'
 require 'open-uri'
 require 'net/http'
+require 'countries'
 
 module Ozorotter::Dal
   class OpenWeatherMap
@@ -38,7 +39,7 @@ module Ozorotter::Dal
 
       coord = json['coord']
       location = Ozorotter::Location.new(
-        name: "#{json['name']}, #{json['sys']['country']}",
+        name: "#{json['name']}, #{adjust_country(json['sys']['country'])}",
         lat: coord['lat'],
         long: coord['lon']
       )
@@ -91,15 +92,24 @@ module Ozorotter::Dal
         case response.code.to_s
         when '404' # Actually, the API currently returns a 200 when not found...
           raise Ozorotter::Errors::NotFoundError.new(url), '404 error'
-        when '500'
-          raise Ozorotter::Errors::ServerError.new(url), '500 error'
-        else
+        when '200'
           response.body
+        else
+          raise Ozorotter::Errors::ServerError.new(url), 'Server error'
         end
 
       JSON.parse(body)
     end
 
+    def adjust_country(name)
+      c = Country.new(name)
+
+      if c.nil?
+        name.sub(/ ?of America/i, '')
+      else
+        c.name
+      end
+    end
   end
 end
 
