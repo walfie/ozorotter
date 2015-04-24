@@ -41,3 +41,4 @@ module Ozorotter::Dal
     end
   end
 end
+

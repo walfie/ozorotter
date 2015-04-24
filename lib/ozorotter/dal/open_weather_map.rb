@@ -89,7 +89,7 @@ module Ozorotter::Dal
       }
 
       query_string = defaults.merge(params).to_query
-      base_url = "http://api.openweathermap.org/data/2.5/weather?#{query_string}"
+      "http://api.openweathermap.org/data/2.5/weather?#{query_string}"
     end
 
     def icon_url(filename)

@@ -1,4 +1,5 @@
-require 'ozorotter'
+require 'ozorotter/client'
+require 'ozorotter/errors'
 
 require 'twitter_ebooks'
 
@@ -16,24 +17,42 @@ module Ozorotter::Bot
       self.delay_range = 1..3
     end
 
+    def self.parse_weather(full_text)
+      text = full_text.gsub(/@\w+/, '') # remove @'s
+
+      location =
+        text.match(/(.+)のお?天気/).to_a[1] ||
+        text.match(/weather (?:for|in|at|like )*([^?!.]+)/).to_a[1]
+
+      location = location.to_s.strip
+
+      location == '' ? nil : location
+    end
+
+    def parse_weather(*args)
+      self.class.parse_weather(*args)
+    end
+
     def on_mention(tweet)
-      location = tweet.text
-        .gsub(/@\w*/, '') # Strip @'s
-        .match(/weather (.*)/).to_a[1]
+      location = parse_weather(tweet.text)
 
       return unless location
 
-      image_data = get_image_data(location)
+      save_path = "output/#{tweet.id}.jpg" # TODO: make this configurable
+
+      image_data = get_image_data(location, save_path)
       if image_data.nil?
         reply(tweet, meta(tweet).reply_prefix + "Sorry, I don't know this place!")
         return
       end
 
       reply_with_image(tweet, image_data)
+
+      File.delete(save_path) if File.exist?(save_path)
     end
 
-    def get_image_data(location, tries=5)
-      @ozorotter.image_from_location(location, 'output/test.jpg')
+    def get_image_data(location, save_path='output/tweet.jpg', tries=5)
+      @ozorotter.image_from_location(location, save_path)
     rescue Ozorotter::Errors::ServerError
       retry if (tries -=1) >= 0
     rescue Ozorotter::Errors::NotFoundError
