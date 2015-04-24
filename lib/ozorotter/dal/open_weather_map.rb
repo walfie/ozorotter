@@ -7,7 +7,6 @@ require 'active_support/inflector/methods' # titleize
 require 'json'
 require 'open-uri'
 require 'net/http'
-require 'countries'
 
 module Ozorotter::Dal
   class OpenWeatherMap
@@ -23,7 +22,7 @@ module Ozorotter::Dal
       puts url if @logging_enabled
 
       parse_api_response(json)
-    rescue Ozorotter::Errors::ServerError => e
+    rescue Ozorotter::Errors::ServerError
       puts "'#{location_name}' 500 error, #{n_tries} retries left" if @logging_enabled
       retry unless (n_tries -=1).zero?
     end
@@ -39,7 +38,7 @@ module Ozorotter::Dal
 
       coord = json['coord']
       location = Ozorotter::Location.new(
-        name: "#{json['name']}, #{adjust_country(json['sys']['country'])}",
+        name: "#{json['name']}, #{json['sys']['country']}",
         lat: coord['lat'],
         long: coord['lon']
       )
@@ -99,16 +98,6 @@ module Ozorotter::Dal
         end
 
       JSON.parse(body)
-    end
-
-    def adjust_country(name)
-      c = Country.new(name)
-
-      if c.nil?
-        name.sub(/ ?of America/i, '')
-      else
-        c.name
-      end
     end
   end
 end
