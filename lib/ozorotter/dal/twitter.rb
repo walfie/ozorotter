@@ -22,19 +22,7 @@ module Ozorotter::Dal
 
     def tweet_source(original_tweet, image_data)
       photo = image_data.photo
-      credits = if photo.source == 'flickr'
-        source = %Q{Source: "#{photo.title}" by #{photo.author} on Flickr}
-
-        # Assume '@username' plus the t.co URL take up 40 characters max
-        if source.length > 100
-          source = %Q{Source: Photo by #{photo.author} on Flickr}
-        end
-        source.gsub!('@', ' ')
-        source += "\n#{photo.page_url}"
-      else
-        "Source: #{photo.image_url} via #{photo.page_url}"
-      end
-      text = "@#{original_tweet.user.screen_name} #{credits}"
+      text = "@#{original_tweet.user.screen_name} #{photo.credits}"
 
       geo = geo_from_location(image_data.weather.location)
 

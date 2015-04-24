@@ -21,6 +21,22 @@ module Ozorotter
         title: (photo.title.to_s.empty? ? 'Untitled' : photo.title)
       )
     end
+
+    # Image credits for tweets
+    def credits
+      if source == 'flickr'
+        credits = %Q{Source: "#{title}" by #{author} on Flickr}
+
+        # Assume '@username' plus the t.co URL take up 40 characters max
+        if credits.length > 100 # TODO: Make this configurable
+          credits = %Q{Source: Photo by #{author} on Flickr}
+        end
+        credits.gsub!('@', ' ')
+        credits += "\n#{page_url}"
+      else
+        "Source: #{image_url} via #{page_url}"
+      end
+    end
   end
 end
 

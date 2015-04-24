@@ -68,7 +68,12 @@ module Ozorotter::Bot
         lat: weather.location.lat,
         long: weather.location.long
       }
-      pictweet(text, image_data.image_path, opts)
+      t = pictweet(text, image_data.image_path, opts)
+
+      text = "@#{t.user.screen_name} #{image_data.photo.credits}"
+      reply(t, text)
+
+      t
     end
   end
 end

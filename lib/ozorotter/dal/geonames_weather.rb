@@ -18,5 +18,9 @@ module Ozorotter::Dal
     rescue Ozorotter::Errors::ServerError # Probably rate limited
       @weather_api.get_weather(location_name)
     end
+
+    def get_weather_from_geo(*args)
+      @weather_api.get_weather_from_geo(*args)
+    end
   end
 end
