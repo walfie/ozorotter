@@ -42,7 +42,7 @@ module Ozorotter::Dal
         long: coord['lon']
       )
 
-      puts "Visiting #{location.name}..." if @logging_enabled
+      puts "OpenWeatherMap: Visiting #{location.name}..." if @logging_enabled
 
       temperature = Ozorotter::Temperature.new(json['main']['temp'])
 
@@ -71,7 +71,7 @@ module Ozorotter::Dal
 
       parse_api_response(json)
     rescue Ozorotter::Errors::ServerError
-      puts "'#{location_name}' 500 error, #{n_tries} retries left" if @logging_enabled
+      STDERR.puts "OpenWeatherMap: '#{location_name}' 500 error, #{n_tries} retries left" if @logging_enabled
       retry unless (n_tries -=1).zero?
     end
 

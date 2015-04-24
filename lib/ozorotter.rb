@@ -8,9 +8,11 @@ require 'ozorotter/temperature'
 require 'ozorotter/weather'
 
 require 'ozorotter/dal/flickr'
+require 'ozorotter/dal/geonames'
+require 'ozorotter/dal/geonames_weather'
 require 'ozorotter/dal/google_images'
-require 'ozorotter/dal/twitter'
 require 'ozorotter/dal/open_weather_map'
+require 'ozorotter/dal/twitter'
 require 'ozorotter/dal/wunderground'
 
 require 'ozorotter/bot/weather_bot'

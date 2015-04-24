@@ -35,6 +35,7 @@ module Ozorotter::Dal
       if parsed_json['geonames'] && !parsed_json['geonames'].empty?
         parsed_json
       else
+        STDERR.puts "Geonames invalid response: #{parsed_json}"
         raise Ozorotter::Errors::ServerError.new(url), 'Probably rate limited'
       end
     end
