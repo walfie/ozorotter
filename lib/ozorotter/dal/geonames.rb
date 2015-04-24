@@ -17,10 +17,15 @@ module Ozorotter::Dal
     end
 
     def parse_geoname(geoname)
+      region = geoname['adminName1']
+      region = nil if region.to_s == ''
+
+      name = [geoname['name'], region].compact.join(', ')
+
       Ozorotter::Location.new(
         lat: geoname['lat'].to_f,
         long: geoname['lng'].to_f,
-        name: "#{geoname['name']}, #{geoname['countryName']}"
+        name: "#{name}\n#{geoname['countryName']}"
       )
     end
 
