@@ -6,7 +6,7 @@ module Ozorotter
   class Weather
     include ObjectFromHash
 
-    attr_reader :description, :icon, :humidity, :location, :temperature, :time
+    attr_accessor :description, :icon, :humidity, :location, :temperature, :time
 
     def initialize(opts={})
       defaults = {

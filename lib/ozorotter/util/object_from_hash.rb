@@ -2,17 +2,18 @@ module ObjectFromHash
   attr_reader :fields
 
   def initialize(opts={})
-    @fields = {}
+    @fields = []
     opts.each do |k,v|
       if self.respond_to?(k)
         instance_variable_set("@#{k}", v)
-        @fields[k] = v
+        @fields.push(k)
       end
     end
   end
 
   def ==(other)
-    other.class == self.class && other.fields == self.fields
+    return false if other.class != self.class
+    @fields.all? { |f| self.send(f) == other.send(f) }
   end
 end
 

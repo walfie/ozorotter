@@ -4,6 +4,7 @@ require 'ozorotter/weather'
 require 'ozorotter/errors'
 
 require 'active_support/inflector/methods' # titleize
+require 'active_support/core_ext/object/to_query'
 require 'json'
 require 'open-uri'
 require 'net/http'
@@ -15,16 +16,14 @@ module Ozorotter::Dal
       @logging_enabled = logging_enabled
     end
 
-    def get_weather(location_name, n_tries=5)
-      url = get_api_url(location_name)
-      json = get_json(url)
+    def get_weather(location, n_tries=5)
+      params = { q: location }
+      get_weather_from_params(params, n_tries)
+    end
 
-      puts url if @logging_enabled
-
-      parse_api_response(json)
-    rescue Ozorotter::Errors::ServerError
-      puts "'#{location_name}' 500 error, #{n_tries} retries left" if @logging_enabled
-      retry unless (n_tries -=1).zero?
+    def get_weather_from_geo(lat, long, n_tries=5)
+      params = { lat: lat, lon: long }
+      get_weather_from_params(params, n_tries)
     end
 
     # Parse the response hash of the OpenWeatherMap JSON
@@ -63,6 +62,19 @@ module Ozorotter::Dal
     end
 
     private
+
+    def get_weather_from_params(params, n_tries=5)
+      url = get_api_url(params)
+      json = get_json(url)
+
+      puts url if @logging_enabled
+
+      parse_api_response(json)
+    rescue Ozorotter::Errors::ServerError
+      puts "'#{location_name}' 500 error, #{n_tries} retries left" if @logging_enabled
+      retry unless (n_tries -=1).zero?
+    end
+
     # Titlecase weather description and various other filtering
     def weather_description(description)
       # Add other sanitization things here if necessary
@@ -70,9 +82,14 @@ module Ozorotter::Dal
       description.downcase.gsub('sky is ', '').titleize
     end
 
-    def get_api_url(location)
-      escaped_location = URI.escape(location)
-      "http://api.openweathermap.org/data/2.5/weather?APPID=#{@api_key}&units=metric&q=#{escaped_location}"
+    def get_api_url(params)
+      defaults = {
+        APPID: @api_key,
+        units: 'metric'
+      }
+
+      query_string = defaults.merge(params).to_query
+      base_url = "http://api.openweathermap.org/data/2.5/weather?#{query_string}"
     end
 
     def icon_url(filename)
