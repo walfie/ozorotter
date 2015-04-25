@@ -71,7 +71,7 @@ module Ozorotter::Dal
 
       parse_api_response(json)
     rescue Ozorotter::Errors::ServerError
-      STDERR.puts "OpenWeatherMap: '#{location_name}' 500 error, #{n_tries} retries left" if @logging_enabled
+      STDERR.puts "OpenWeatherMap: '#{params}' 500 error, #{n_tries} retries left" if @logging_enabled
       retry unless (n_tries -=1).zero?
     end
 

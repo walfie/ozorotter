@@ -38,8 +38,7 @@ module Ozorotter::Dal
 
       # Keep trying until one of the API calls returns enough photos
       photos =
-        search_with_tags(params) ||
-        search_without_time_of_day!(weather, params) ||
+        search_with_tags(weather, params) ||
         search_without_group_id!(params) ||
         search_without_tags!(weather, params)
 
@@ -59,9 +58,9 @@ module Ozorotter::Dal
       {
         lat: weather.location.lat.to_s,
         lon: weather.location.long.to_s,
-        tags: "#{weather.category},#{weather.time_of_day}",
+        tags: weather.category,
         tag_mode: 'all',
-        extras: 'owner_name',
+        extras: 'owner_name,tags',
         safe_search: 1,
         accuracy: @config[:accuracy],
         radius: @config[:radius],
@@ -82,21 +81,20 @@ module Ozorotter::Dal
       photos.length < @photos_threshold ? nil : photos
     end
 
-    def search_with_tags(params)
+    def search_with_tags(weather, params)
       photos = search_with_params(params)
-      puts "Searching Flickr: #{params[:tags]} (#{photos.length})" if @logging_enabled
+
+      filtered_photos = photos.select { |p| p.tags.include?(weather.time_of_day) }
+
+      if @logging_enabled
+        searched = "#{params[:tags]},#{weather.time_of_day}"
+        puts "Searching Flickr: #{searched} (#{filtered_photos.length})"
+      end
+      return filtered_photos if length_check(filtered_photos)
+
+      puts "Without day/night (#{photos.length})" if @logging_enabled
 
       length_check(photos)
-    end
-
-    def search_without_time_of_day!(weather, params)
-      params[:tags] = weather.category
-      params.delete(:tag_mode)
-      photos = search_with_params(params)
-      puts "Searching without day/night (#{photos.length})" if @logging_enabled
-
-      length_check(photos)
-      photos.length < @photos_threshold ? nil : photos
     end
 
     def search_without_group_id!(params)
