@@ -29,6 +29,14 @@ module Ozorotter::Bot
       self.delay_range = 1..3
     end
 
+    def self.remove_ats(text)
+      text.gsub(/@\w+/, '').strip
+    end
+
+    def remove_ats(*args)
+      self.class.remove_ats(*args)
+    end
+
     def self.parse_weather(full_text)
       text = remove_ats(full_text)
 
@@ -63,20 +71,24 @@ module Ozorotter::Bot
       return unless location
 
       existing_tweet_text = @location_cache.read(location)
-      return reply_with_text(tweet, existing_tweet_text) if existing_tweet_text
+      if existing_tweet_text
+        reply_with_text(tweet, existing_tweet_text)
+      else
+        save_path = "output/#{tweet.id}.jpg" # TODO: make this configurable
 
-      save_path = "output/#{tweet.id}.jpg" # TODO: make this configurable
+        image_data = get_image_data(location, save_path)
+        if image_data.nil?
+          reply_with_text(tweet, "Sorry, I don't know this place!")
+          return
+        end
 
-      image_data = get_image_data(location, save_path)
-      if image_data.nil?
-        reply_with_text(tweet, "Sorry, I don't know this place!")
-        return
+        new_tweet = reply_with_image(tweet, image_data)
+        @location_cache.write(location, remove_ats(new_tweet.text))
+
+        File.delete(save_path) if File.exist?(save_path)
+
+        new_tweet
       end
-
-      new_tweet = reply_with_image(tweet, image_data)
-      @location_cache.write(location, remove_ats(new_tweet.text))
-
-      File.delete(save_path) if File.exist?(save_path)
 
       @user_cache.increment(tweet.user.id)
     end
@@ -113,10 +125,6 @@ module Ozorotter::Bot
       #tweet(text, in_reply_to_status_id: pic_tweet.id)
 
       pic_tweet
-    end
-
-    def remove_ats(text)
-      text.gsub(/@\w+/, '').strip
     end
   end
 end
