@@ -33,13 +33,15 @@ keys = {
 }
 
 # TODO: Don't hardcode the number of minutes
-user_cache = ActiveSupport::Cache::MemoryStore.new(expires_in: 10.minutes)
+location_cache = ActiveSupport::Cache::MemoryStore.new(expires_in: 10.minutes)
+user_cache = ActiveSupport::Cache::MemoryStore.new(expires_in: 20.minutes)
 
 Ozorotter::Bot::WeatherBot.new(
   name: ENV['BOT_USERNAME'],
   ozorotter: ozorotter,
   keys: keys,
-  cache: user_cache
+  location_cache: location_cache,
+  user_cache: user_cache
 ) do |bot|
   bot.access_token = ENV['TWITTER_ACCESS_TOKEN']
   bot.access_token_secret = ENV['TWITTER_ACCESS_TOKEN_SECRET']

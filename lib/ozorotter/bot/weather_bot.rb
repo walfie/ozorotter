@@ -4,11 +4,20 @@ require 'ozorotter/errors'
 require 'active_support/cache'
 require 'twitter_ebooks'
 
+# This whole file is a mess
 module Ozorotter::Bot
   class WeatherBot < Ebooks::Bot
-    def initialize(name: '', ozorotter: nil, keys: {}, cache: nil, &block)
+    def initialize(
+      name: '',
+      ozorotter: nil,
+      keys: {},
+      user_cache: nil,
+      location_cache: nil,
+      &block
+    )
       @ozorotter = ozorotter
-      @cache = cache || ActiveSupport::Cache::NullStore.new
+      @user_cache = user_cache || ActiveSupport::Cache::NullStore.new
+      @location_cache = location_cache || ActiveSupport::Cache::NullStore.new
 
       self.consumer_key = keys[:consumer_key]
       self.consumer_secret = keys[:consumer_secret]
@@ -21,7 +30,7 @@ module Ozorotter::Bot
     end
 
     def self.parse_weather(full_text)
-      text = full_text.gsub(/@\w+/, '') # remove @'s
+      text = remove_ats(full_text)
 
       location =
         text.match(/(.+)のお?天気/).to_a[1] ||
@@ -39,9 +48,10 @@ module Ozorotter::Bot
 
     # Allow n requests per user (until the cache entry expires)
     def user_limited?(key)
-      @cache.read(key).to_i > 3 # TODO: Don't hardcode
+      @user_cache.read(key).to_i > 3 # TODO: Don't hardcode
     end
 
+    # TODO: This method does too many things. Refactor it!
     def on_mention(tweet)
       if user_limited?(tweet.user.id) # To prevent spam
         puts "Ignoring tweet from @#{tweet.user.screen_name}"
@@ -52,18 +62,23 @@ module Ozorotter::Bot
 
       return unless location
 
+      existing_tweet_text = @location_cache.read(location)
+      return reply_with_text(tweet, existing_tweet_text) if existing_tweet_text
+
       save_path = "output/#{tweet.id}.jpg" # TODO: make this configurable
 
       image_data = get_image_data(location, save_path)
       if image_data.nil?
-        reply(tweet, meta(tweet).reply_prefix + "Sorry, I don't know this place!")
+        reply_with_text(tweet, "Sorry, I don't know this place!")
         return
       end
 
-      reply_with_image(tweet, image_data)
-      @cache.increment(tweet.user.id)
+      new_tweet = reply_with_image(tweet, image_data)
+      @location_cache.write(location, remove_ats(new_tweet.text))
 
       File.delete(save_path) if File.exist?(save_path)
+
+      @user_cache.increment(tweet.user.id)
     end
 
     def get_image_data(location, save_path='output/tweet.jpg', tries=5)
@@ -72,6 +87,11 @@ module Ozorotter::Bot
       retry if (tries -=1) >= 0
     rescue Ozorotter::Errors::NotFoundError
       nil
+    end
+
+    def reply_with_text(tweet, text)
+      response = meta(tweet).reply_prefix + text
+      tweet(response, in_reply_to_status_id: tweet.id)
     end
 
     def reply_with_image(tweet, image_data)
@@ -89,6 +109,10 @@ module Ozorotter::Bot
       tweet(text, in_reply_to_status_id: pic_tweet.id)
 
       pic_tweet
+    end
+
+    def remove_ats(text)
+      text.gsub(/@\w+/, '').strip
     end
   end
 end
