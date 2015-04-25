@@ -7,7 +7,7 @@ RSpec.describe Ozorotter::Dal::Flickr do
     context "Flickr doesn't return enough photos" do
       let(:flickr) do
         flickraw = double(:flickr)
-        allow(flickraw).to receive_message_chain('photos.search') { [1, 2, 3] }
+        allow(flickraw).to receive_message_chain('photos.search') { [] }
         Flickr.new(flickraw, { photos_threshold: 5 }, false)
       end
 

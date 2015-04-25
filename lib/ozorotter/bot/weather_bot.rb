@@ -5,10 +5,10 @@ require 'twitter_ebooks'
 
 module Ozorotter::Bot
   class WeatherBot < Ebooks::Bot
-    def initialize(name, ozorotter_client, keys={}, &block)
+    def initialize(name, ozorotter_client, options={}, &block)
       @ozorotter = ozorotter_client
-      self.consumer_key = keys[:consumer_key]
-      self.consumer_secret = keys[:consumer_secret]
+      self.consumer_key = options[:consumer_key]
+      self.consumer_secret = options[:consumer_secret]
 
       super(name, &block)
     end
