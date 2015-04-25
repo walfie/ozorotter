@@ -35,7 +35,9 @@ module Ozorotter::Dal
             file_type: :jpg
           }
           results = Google::Search::Image.new(search_settings).to_a
-          results.reject { |r| r.uri.include?('getty') } # TODO: Put in conf
+          results.reject! do |r| # TODO: Put in conf
+            r.uri.include?('getty') || r.context_uri.include?('getty')
+          end
           return nil if results.empty?
           puts "Searching Google: #{query} (#{results.length})" if @logging_enabled
 

@@ -5,6 +5,9 @@ RSpec.describe Ozorotter::Bot::WeatherBot do
 
   describe '.parse_weather' do
     cases = [
+      { given: "nyc weather", expect: 'nyc'},
+      { given: "New York weather", expect: 'New York'},
+
       { given: "weather New York, US", expect: 'New York, US'},
       { given: "weather New York", expect: 'New York'},
       { given: "weather for New York", expect: 'New York'},
