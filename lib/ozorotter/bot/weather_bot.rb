@@ -1,14 +1,17 @@
 require 'ozorotter/client'
 require 'ozorotter/errors'
 
+require 'active_support/cache'
 require 'twitter_ebooks'
 
 module Ozorotter::Bot
   class WeatherBot < Ebooks::Bot
-    def initialize(name, ozorotter_client, options={}, &block)
-      @ozorotter = ozorotter_client
-      self.consumer_key = options[:consumer_key]
-      self.consumer_secret = options[:consumer_secret]
+    def initialize(name: '', ozorotter: nil, keys: {}, cache: nil, &block)
+      @ozorotter = ozorotter
+      @cache = cache || ActiveSupport::Cache::NullStore.new
+
+      self.consumer_key = keys[:consumer_key]
+      self.consumer_secret = keys[:consumer_secret]
 
       super(name, &block)
     end
@@ -34,7 +37,17 @@ module Ozorotter::Bot
       self.class.parse_weather(*args)
     end
 
+    # Allow n requests per user (until the cache entry expires)
+    def user_limited?(key)
+      @cache.read(key).to_i > 3 # TODO: Don't hardcode
+    end
+
     def on_mention(tweet)
+      if user_limited?(tweet.user.id) # To prevent spam
+        puts "Ignoring tweet from @#{tweet.user.screen_name}"
+        return
+      end
+
       location = parse_weather(tweet.text)
 
       return unless location
@@ -48,6 +61,7 @@ module Ozorotter::Bot
       end
 
       reply_with_image(tweet, image_data)
+      @cache.increment(tweet.user.id)
 
       File.delete(save_path) if File.exist?(save_path)
     end
@@ -69,12 +83,12 @@ module Ozorotter::Bot
         lat: weather.location.lat,
         long: weather.location.long
       }
-      t = pictweet(text, image_data.image_path, opts)
+      pic_tweet = pictweet(text, image_data.image_path, opts)
 
-      text = "@#{t.user.screen_name} #{image_data.photo.credits}"
-      reply(t, text)
+      text = "@#{tweet.user.screen_name} #{image_data.photo.credits}"
+      tweet(text, in_reply_to_status_id: pic_tweet.id)
 
-      t
+      pic_tweet
     end
   end
 end
