@@ -77,10 +77,7 @@ module Ozorotter::Bot
         save_path = "output/#{tweet.id}.jpg" # TODO: make this configurable
 
         image_data = get_image_data(location, save_path)
-        if image_data.nil?
-          reply_with_text(tweet, "Sorry, I don't know this place!")
-          return
-        end
+        return if image_data.nil? # Previously: reply with "I don't know this place"
 
         new_tweet = reply_with_image(tweet, image_data)
         @location_cache.write(location, remove_ats(new_tweet.text))
