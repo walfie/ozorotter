@@ -1,2 +1,2 @@
-worker: true
+worker: bundle exec ebooks start
 
