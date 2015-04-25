@@ -105,8 +105,12 @@ module Ozorotter::Bot
       }
       pic_tweet = pictweet(text, image_data.image_path, opts)
 
-      text = "@#{tweet.user.screen_name} #{image_data.photo.credits}"
-      tweet(text, in_reply_to_status_id: pic_tweet.id)
+      # Reply with source
+      # Commented out for now. 2400 tweets are allowed per day, and
+      # replying with source would half that number...
+      # TODO: Maybe have it handled by a separate account
+      #text = "@#{tweet.user.screen_name} #{image_data.photo.credits}"
+      #tweet(text, in_reply_to_status_id: pic_tweet.id)
 
       pic_tweet
     end
