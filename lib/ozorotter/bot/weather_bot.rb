@@ -37,7 +37,7 @@ module Ozorotter::Bot
       self.class.remove_ats(*args)
     end
 
-    def self.parse_weather(full_text)
+    def self.parse_location(full_text)
       text = remove_ats(full_text)
 
       location =
@@ -45,13 +45,13 @@ module Ozorotter::Bot
         text.match(/weather (?:for|in|at|like )*([^?!.]+)/).to_a[1] ||
         text.match(/(.+) weather/).to_a[1]
 
-      location = location.to_s.strip
+      location = location.to_s.strip.downcase
 
       location == '' ? nil : location
     end
 
-    def parse_weather(*args)
-      self.class.parse_weather(*args)
+    def parse_location(*args)
+      self.class.parse_location(*args)
     end
 
     # Allow n requests per user (until the cache entry expires)
@@ -66,7 +66,7 @@ module Ozorotter::Bot
         return
       end
 
-      location = parse_weather(tweet.text)
+      location = parse_location(tweet.text)
 
       return unless location
 
