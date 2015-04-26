@@ -54,7 +54,7 @@ module Ozorotter
         c.interline_spacing @config[:interline_spacing]
 
         draw = ->(text, x, y, color='white') do
-          draw_command = "text #{x},#{y} '#{text}'"
+          draw_command = "text #{x},#{y} '#{text.gsub("'"){"\\'"}}'"
 
           # Outline
           c.stroke 'black'
