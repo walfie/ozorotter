@@ -1,5 +1,6 @@
 require 'ozorotter/location'
 
+require 'active_support/core_ext/object/blank'
 require 'json'
 require 'open-uri'
 require 'net/http'
@@ -30,10 +31,10 @@ module Ozorotter::Dal
     end
 
     def parse_geoname(geoname)
-      region = geoname['adminName1']
-      region = nil if region.to_s == ''
+      region = geoname['adminName1'].presence
+      country = geoname['countryName'].presence # Antarctica has a blank countryName
 
-      region_and_country = [region, geoname['countryName']].compact.join(', ')
+      region_and_country = [region, country].compact.join(', ')
 
       Ozorotter::Location.new(
         lat: geoname['lat'].to_f,
