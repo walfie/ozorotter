@@ -6,11 +6,13 @@ RSpec.describe Ozorotter::Bot::WeatherBot do
   describe '.parse_location' do
     cases = [
       { given: "nyc weather", expect: 'nyc' },
+      { given: "nyc WeaTHer", expect: 'nyc' },
       { given: "New York weather", expect: 'new york' },
 
       { given: "weather New York, US", expect: 'new york, us' },
       { given: "weather New York", expect: 'new york' },
       { given: "weather for New York", expect: 'new york' },
+      { given: "WHAT IS THE WEATHER FOR NEW YORK?!", expect: 'new york' },
       { given: "what's the weather in New York?", expect: 'new york' },
       { given: "@user what's the weather like in New York?", expect: 'new york' },
       { given: "weather New York! I can put anything here", expect: 'new york' },

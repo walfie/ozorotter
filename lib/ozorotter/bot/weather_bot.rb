@@ -42,8 +42,8 @@ module Ozorotter::Bot
 
       location =
         text.match(/(.+)のお?天気/).to_a[1] ||
-        text.match(/weather (?:for|in|at|like )*([^?!.]+)/).to_a[1] ||
-        text.match(/(.+) weather/).to_a[1]
+        text.match(/weather (?:for|in|at|like )*([^?!.]+)/i).to_a[1] ||
+        text.match(/(.+) weather/i).to_a[1]
 
       location = location.to_s.strip.downcase
 
