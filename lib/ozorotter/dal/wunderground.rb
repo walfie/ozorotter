@@ -60,7 +60,7 @@ module Ozorotter::Dal
 
     private
     def get_api_url(query)
-      "http://api.wunderground.com/api/#{@api_key}/conditions/q/#{query}.json"
+      "http://api.wunderground.com/api/#{@api_key}/conditions/q/#{URI.escape(query)}.json"
     end
 
     def get_json(url)

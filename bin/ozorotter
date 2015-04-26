@@ -13,7 +13,7 @@ options = {
   config: 'config.yml',
   output: 'output/out.jpg',
   tweet: false,
-  weather_api: 'wunderground'
+  weather_api: :wunderground
 }
 
 ARGV << '-h' if ARGV.empty?

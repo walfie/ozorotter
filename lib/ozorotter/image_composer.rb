@@ -81,7 +81,9 @@ module Ozorotter
         location_lines = weather.location.name.split("\n")
         main_location = location_lines.shift
 
-        location_offset += 0.1*font_size unless location.lines.empty?
+        if location_offset != 0 && !location_lines.empty?
+          location_offset += 0.1*font_size
+        end
 
         c.pointsize 0.6*font_size
         location_lines.each do |l|
