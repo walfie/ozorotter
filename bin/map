@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'dotenv'
+require 'twitter'
+
+Dotenv.load
+
+$LOAD_PATH.unshift('lib')
+require 'ozorotter'
+
+options = {
+  tweet: false
+}
+
+ARGV << '-h' if ARGV.empty?
+optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: map [username] [options]"
+
+  opts.on('-t', '--[no-]tweet',
+          'Tweet the image using the keys specified in ENV (default false)') do |t|
+    options[:tweet] = t
+  end
+end.parse!
+
+username ||= ARGV.pop || ENG['BOT_USERNAME']
+
+########
+# Main #
+########
+twitter = Twitter::REST::Client.new do |config|
+  config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
+  config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
+  config.access_token = ENV['TWITTER_ACCESS_TOKEN']
+  config.access_token_secret = ENV['TWITTER_ACCESS_TOKEN_SECRET']
+end
+akari = Ozorotter::Dal::Twitter.new(twitter)
+
+map_url = akari.get_map(username)
+puts map_url # TODO: Consider the -t option
+
