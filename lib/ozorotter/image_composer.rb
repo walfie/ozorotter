@@ -31,7 +31,6 @@ module Ozorotter
       margin = @config[:margin]
 
       degrees = weather.temperature.to_s
-      time = weather.time_string
 
       background = resize_to_fill(MiniMagick::Image.open(photo.image_url), w, h)
       overlay = MiniMagick::Image.open(overlay_path)
@@ -78,13 +77,22 @@ module Ozorotter
           location_offset = 0.5*font_size
         end
 
-        # Location
+        # Location. Render the first line in standard size, other lines smaller
+        location_lines = weather.location.name.split("\n")
+        main_location = location_lines.shift
+
+        c.pointsize 0.6*font_size
+        location_lines.each do |l|
+          draw.call l, margin, location_offset
+          location_offset += 0.6*font_size
+        end
+
         c.pointsize font_size
-        draw.call weather.location.name, margin, location_offset
+        draw.call main_location, margin, location_offset
 
         # Time
         c.pointsize 0.5*font_size
-        draw.call time, margin, (1.2*font_size + location_offset)
+        draw.call weather.time_string, margin, (1.2*font_size + location_offset)
 
         c.gravity 'NorthEast'
         # Temperature

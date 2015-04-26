@@ -35,7 +35,7 @@ RSpec.describe Ozorotter::Dal::Geonames do
       expected = Ozorotter::Location.new(
         lat: 35.6895,
         long: 139.69171,
-        name: "Tokyo, Tōkyō\nJapan"
+        name: "Tokyo\nTōkyō, Japan"
       )
 
       expect(geonames.get_location('Tokyo')).to eq(expected)
