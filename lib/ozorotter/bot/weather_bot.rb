@@ -61,6 +61,8 @@ module Ozorotter::Bot
 
     # TODO: This method does too many things. Refactor it!
     def on_mention(tweet)
+      tries_remaining ||= 1
+
       if user_limited?(tweet.user.id) # To prevent spam
         puts "Ignoring tweet from @#{tweet.user.screen_name}"
         return
@@ -77,7 +79,7 @@ module Ozorotter::Bot
         save_path = "output/#{tweet.id}.jpg" # TODO: make this configurable
 
         image_data = get_image_data(location, save_path)
-        return if image_data.nil? # Previously: reply with "I don't know this place"
+        return if image_data.nil?
 
         new_tweet = reply_with_image(tweet, image_data)
         @location_cache.write(location, remove_ats(new_tweet.text))
@@ -88,6 +90,14 @@ module Ozorotter::Bot
       end
 
       @user_cache.increment(tweet.user.id)
+    rescue Exception => e
+      STDERR.puts e.inspect
+      STDERR.puts e.backtrace.map { |s| "\t"+s }.join("\n")
+
+      unless tries.zero?
+        tries -= 1
+        retry
+      end
     end
 
     def get_image_data(location, save_path='output/tweet.jpg', tries=5)
