@@ -42,7 +42,7 @@ module Ozorotter::Bot
 
       location =
         text.match(/(.+)のお?天気/).to_a[1] ||
-        text.match(/weather (?:for|in|at|like )*([^?!.]+)/i).to_a[1] ||
+        text.match(/weather (?:(?:today|for|in|at|like) )*([^?!.]+)/i).to_a[1] ||
         text.match(/(.+) weather/i).to_a[1]
 
       location = location.to_s.strip.downcase
@@ -56,7 +56,7 @@ module Ozorotter::Bot
 
     # Allow n requests per user (until the cache entry expires)
     def user_limited?(key)
-      @user_cache.read(key).to_i > 3 # TODO: Don't hardcode
+      @user_cache.read(key).to_i >= 3 # TODO: Don't hardcode
     end
 
     # TODO: This method does too many things. Refactor it!
