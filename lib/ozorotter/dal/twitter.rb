@@ -38,7 +38,7 @@ module Ozorotter::Dal
 
       coord_params = coordinates.map {|c| "markers=#{c}"}.join('&')
 
-      url = "https://maps.googleapis.com/maps/api/staticmap?size=510x400&center=35,10&#{coord_params}"
+      url = "https://maps.googleapis.com/maps/api/staticmap?zoom=1&size=510x400&center=35,10&#{coord_params}"
       url[0, 2048]
     end
 
