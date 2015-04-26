@@ -94,8 +94,8 @@ module Ozorotter::Bot
       STDERR.puts e.inspect
       STDERR.puts e.backtrace.map { |s| "\t"+s }.join("\n")
 
-      unless tries.zero?
-        tries -= 1
+      unless tries_remaining.zero?
+        tries_remaining -= 1
         retry
       end
     end
