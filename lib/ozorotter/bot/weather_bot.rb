@@ -40,6 +40,8 @@ module Ozorotter::Bot
     def self.parse_location(full_text)
       text = remove_ats(full_text)
 
+      return nil if text.start_with?('RT')
+
       location =
         text.match(/(.+)のお?天気/).to_a[1] ||
         text.match(/weather (?:(?:today|for|in|at|like) )*([^?!.]+)/i).to_a[1] ||

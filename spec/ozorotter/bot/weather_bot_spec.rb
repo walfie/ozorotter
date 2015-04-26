@@ -31,6 +31,8 @@ RSpec.describe Ozorotter::Bot::WeatherBot do
       { given: "東京 お天気", expect: nil },
       { given: "の天気", expect: nil },
       { given: "@user のお天気", expect: nil },
+      { given: "RT @user nyc weather", expect: nil },
+      { given: "RT @user @user2 nyc weather", expect: nil },
     ]
 
     cases.each do |c|
