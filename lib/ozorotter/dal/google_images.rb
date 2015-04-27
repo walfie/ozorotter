@@ -22,40 +22,46 @@ module Ozorotter::Dal
       term
     end
 
-    def search(weather, n_tries=5)
-      query = "#{weather.location.name} #{adjust_terms(weather.category)} #{weather.time_of_day}"
+    def search(weather, n_tries=3)
+      base_query = "#{adjust_terms(weather.category)} #{weather.time_of_day}"
+      query_with_location = "#{weather.location.name} #{base_query}"
 
-      # Retry a few times in case we get an error 
-      n_tries.times do
-        begin
-          search_settings = {
-            query: query,
-            safe: 'active',
-            image_size: :large,
-            file_type: :jpg
-          }
-          results = Google::Search::Image.new(search_settings).to_a
-          results.reject! do |r| # TODO: Put in conf
-            r.uri.include?('getty') || r.context_uri.include?('getty')
-          end
-          return nil if results.empty?
-          puts "Searching Google: #{query} (#{results.length})" if @logging_enabled
+      search_query(query_with_location, n_tries) || search_query(base_query, n_tries)
+    end
 
-          image = results.sample
-          uri = results.sample.uri unless results.empty?
-          puts uri if @logging_enabled
-
-          return Ozorotter::Photo.new(
-            source: 'google',
-            image_url: image.uri,
-            page_url: image.context_uri
-          )
-        rescue Exception => e
-          puts e.message
-        end
+    def search_query(query, tries_remaining=3)
+      search_settings = {
+        query: query,
+        safe: 'active',
+        image_size: :large,
+        file_type: :jpg
+      }
+      results = Google::Search::Image.new(search_settings).to_a
+      results.reject! do |r| # TODO: Put in conf
+        r.uri.include?('getty') || r.context_uri.include?('getty')
       end
+      puts "Searching Google: #{query} (#{results.length})" if @logging_enabled
 
-      nil # Give up
+      return nil if results.empty?
+
+      image = results.sample
+      uri = results.sample.uri
+      puts uri if @logging_enabled
+
+      return Ozorotter::Photo.new(
+        source: 'google',
+        image_url: image.uri,
+        page_url: image.context_uri
+      )
+    rescue Exception => e
+      STDERR.puts "Failed: #{e.inspect}"
+
+      if tries_remaining.zero?
+        return nil
+      else
+        tries_remaining -= 1
+        retry
+      end
     end
   end
 end
