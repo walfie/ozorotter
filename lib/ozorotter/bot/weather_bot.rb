@@ -58,7 +58,9 @@ module Ozorotter::Bot
 
     # Allow n requests per user (until the cache entry expires)
     def user_limited?(key)
-      @user_cache.read(key).to_i >= 3 # TODO: Don't hardcode
+      count = @user_cache.fetch(key){0}.to_i
+      puts "User cache: #{key} => #{count}"
+      count >= 3 # TODO: Don't hardcode
     end
 
     # TODO: This method does too many things. Refactor it!
