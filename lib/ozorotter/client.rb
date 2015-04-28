@@ -20,6 +20,8 @@ module Ozorotter
 
     def image_from_location(location_name, save_path=nil)
       weather = weather_api.get_weather(location_name)
+      return nil if weather.nil?
+
       image_from_weather(weather, save_path)
     end
 

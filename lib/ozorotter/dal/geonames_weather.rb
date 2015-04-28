@@ -10,6 +10,8 @@ module Ozorotter::Dal
     def get_weather(location_name)
       loc = get_location(location_name)
 
+      return nil if loc.nil?
+
       puts "Geonames: #{location_name} -> #{loc.name}" # TODO: Check if logging enabled
 
       weather = @weather_api.get_weather_from_geo(loc.lat, loc.long)

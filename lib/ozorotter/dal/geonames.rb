@@ -15,8 +15,10 @@ module Ozorotter::Dal
       url = "http://api.geonames.org/searchJSON?q=#{URI.escape(search_term)}&maxRows=1&username=#{@username}"
       json = get_json(url)
 
-      if json['geonames'].nil? || json['geonames'].empty?
-        STDERR.puts "Geonames invalid response: #{parsed_json}"
+      return nil if json['geonames'].empty? # Don't know this place
+
+      if json['geonames'].nil?
+        STDERR.puts "Geonames: Invalid response for '#{search_term}' #{json.inspect}"
         raise Ozorotter::Errors::ServerError.new(url), 'Probably rate limited'
       end
 
