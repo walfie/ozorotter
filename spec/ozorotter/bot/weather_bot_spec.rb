@@ -20,6 +20,12 @@ RSpec.describe Ozorotter::Bot::WeatherBot do
       { given: "weather 東京", expect: '東京' },
 
       { given: "London, UKの天気", expect: 'london, uk' },
+      { given: "天気 東京", expect: '東京' },
+      { given: "お天気 東京", expect: '東京' },
+      { given: "東京 天気", expect: '東京' },
+      { given: "東京 お天気", expect: '東京' },
+      { given: "東京 日本 天気", expect: '東京 日本' },
+      { given: "東京 日本 お天気", expect: '東京 日本' },
       { given: "東京の天気", expect: '東京' },
       { given: "東京のお天気", expect: '東京' },
       { given: "東京のお天気は？", expect: '東京' },
@@ -27,8 +33,6 @@ RSpec.describe Ozorotter::Bot::WeatherBot do
 
       { given: "weather", expect: nil },
       { given: "weather?", expect: nil },
-      { given: "東京 天気", expect: nil },
-      { given: "東京 お天気", expect: nil },
       { given: "の天気", expect: nil },
       { given: "@user のお天気", expect: nil },
       { given: "RT @user nyc weather", expect: nil },

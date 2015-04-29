@@ -43,9 +43,11 @@ module Ozorotter::Bot
       return nil if text.start_with?('RT')
 
       location =
-        text.match(/(.+)のお?天気/).to_a[1] ||
         text.match(/weather (?:(?:today|for|in|at|like) )*([^?!.]+)/i).to_a[1] ||
-        text.match(/(.+) weather/i).to_a[1]
+        text.match(/(.+) weather/i).to_a[1] ||
+        text.match(/(.+)のお?天気/).to_a[1] ||
+        text.match(/(.+) お?天気/).to_a[1] ||
+        text.match(/お?天気 (.+)/).to_a[1]
 
       location = location.to_s.strip.downcase
 
