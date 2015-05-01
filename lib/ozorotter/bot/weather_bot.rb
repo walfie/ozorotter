@@ -38,7 +38,7 @@ module Ozorotter::Bot
     end
 
     def self.parse_location(full_text)
-      text = remove_ats(full_text)
+      text = remove_ats(full_text).gsub('　', ' ') # Replace full-width spaces
 
       return nil if text.start_with?('RT')
 

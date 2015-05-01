@@ -24,8 +24,10 @@ RSpec.describe Ozorotter::Bot::WeatherBot do
       { given: "お天気 東京", expect: '東京' },
       { given: "東京 天気", expect: '東京' },
       { given: "東京 お天気", expect: '東京' },
-      { given: "東京 日本 天気", expect: '東京 日本' },
-      { given: "東京 日本 お天気", expect: '東京 日本' },
+      { given: "東京　天気", expect: '東京' }, # Full width spaces
+      { given: "東京　お天気", expect: '東京' },
+      { given: "東京　日本　天気", expect: '東京 日本' },
+      { given: "東京　日本　お天気", expect: '東京 日本' },
       { given: "東京の天気", expect: '東京' },
       { given: "東京のお天気", expect: '東京' },
       { given: "東京のお天気は？", expect: '東京' },
