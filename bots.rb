@@ -15,7 +15,7 @@ flickr_keys = { api_key: ENV['FLICKR_KEY'], shared_secret: ENV['FLICKR_SECRET'] 
 flickr = Ozorotter::Dal::Flickr.build(flickr_keys, config['flickr'])
 google = Ozorotter::Dal::GoogleImages.new
 
-weather_api = Ozorotter::Dal::OpenWeatherMap.new(ENV['OPENWEATHERMAP_KEY'])
+weather_api = Ozorotter::Dal::YahooWeather.new
 geonames_weather = Ozorotter::Dal::GeonamesWeather.new(ENV['GEONAMES_KEY'], weather_api)
 
 image_composer = Ozorotter::ImageComposer.new(config['image'])
