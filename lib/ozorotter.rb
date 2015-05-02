@@ -15,5 +15,7 @@ require 'ozorotter/dal/open_weather_map'
 require 'ozorotter/dal/twitter'
 require 'ozorotter/dal/wunderground'
 require 'ozorotter/dal/yahoo_weather'
+require 'ozorotter/dal/multi_weather'
 
 require 'ozorotter/bot/weather_bot'
+
