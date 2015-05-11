@@ -13,7 +13,7 @@ module Ozorotter::Dal
     def self.build(keys={}, config={}, logging_enabled=true)
 
       # TODO: Workaround for heroku ca-certs updating slowly
-      FlickRaw.check_certificate = false
+      FlickRaw.secure = false
 
       FlickRaw.api_key = keys[:api_key]
       FlickRaw.shared_secret = keys[:shared_secret]
