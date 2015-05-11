@@ -18,23 +18,25 @@ module Ozorotter
       yield(self) if block_given?
     end
 
-    def image_from_location(location_name, save_location=nil)
+    def image_from_location(location_name, save_path=nil)
       weather = weather_api.get_weather(location_name)
-      image_from_weather(weather, save_location)
+      return nil if weather.nil?
+
+      image_from_weather(weather, save_path)
     end
 
-    def image_from_weather(weather, save_location=nil)
+    def image_from_weather(weather, save_path=nil)
       photo = image_searcher.search(weather) || fallback_image_searcher.search(weather)
       raise 'Photo search failed' if photo.nil?
 
       overlay = image_composer.random_overlay(weather)
       image = image_composer.compose_image(weather, overlay, photo)
 
-      image.write(save_location) unless save_location.nil?
+      image.write(save_path) unless save_path.nil?
 
       ImageData.new(
         image: image,
-        image_path: save_location,
+        image_path: save_path,
         photo: photo,
         weather: weather
       )

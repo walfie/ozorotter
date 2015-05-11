@@ -10,7 +10,7 @@ module Ozorotter::Dal
     end
 
     def tweet_image(image_data)
-      text = text_from_weather(image_data.weather)
+      text = image_data.weather.to_s
       file = open(image_data.image_path)
       geo = geo_from_location(image_data.weather.location)
 
@@ -22,23 +22,24 @@ module Ozorotter::Dal
 
     def tweet_source(original_tweet, image_data)
       photo = image_data.photo
-      credits = if photo.source == 'flickr'
-        source = %Q{Source: "#{photo.title}" by #{photo.author} on Flickr}
-
-        # Assume '@username' plus the t.co URL take up 40 characters max
-        if source.length > 100
-          source = %Q{Source: Photo by #{photo.author} on Flickr}
-        end
-        source.gsub!('@', ' ')
-        source += "\n#{photo.page_url}"
-      else
-        "Source: #{photo.image_url} via #{photo.page_url}"
-      end
-      text = "@#{original_tweet.user.screen_name} #{credits}"
+      text = "@#{original_tweet.user.screen_name} #{photo.credits}"
 
       geo = geo_from_location(image_data.weather.location)
 
       reply(original_tweet.id, text, geo)
+    end
+
+    def get_map(username)
+      tweets = @client.user_timeline(username, count: 200)
+
+      coordinates = tweets.map do |t|
+        t.geo.coordinates.map(&:round).join(',') unless t.geo.nil?
+      end.compact.uniq
+
+      coord_params = coordinates.map {|c| "markers=#{c}"}.join('&')
+
+      url = "https://maps.googleapis.com/maps/api/staticmap?zoom=1&size=510x400&center=35,10&#{coord_params}"
+      url[0, 2048]
     end
 
     private
@@ -46,7 +47,7 @@ module Ozorotter::Dal
       begin
         @client.update_with_media(text, file, options)
       rescue Twitter::Error::RequestTimeout
-        sleep 15
+        sleep 3
         retry
       end
     end
@@ -60,15 +61,6 @@ module Ozorotter::Dal
         lat: location.lat.to_f,
         long: location.long.to_f
       }
-    end
-
-    def text_from_weather weather
-      [
-        weather.location.name,
-        "#{weather.temperature.to_s}",
-        "Humidity: #{weather.humidity}",
-        weather.description
-      ].join("\n")
     end
   end
 end

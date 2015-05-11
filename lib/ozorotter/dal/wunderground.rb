@@ -23,6 +23,10 @@ module Ozorotter::Dal
       parse_observation_hash(json['current_observation'])
     end
 
+    def get_weather_from_geo(lat, long)
+      get_weather("#{lat},#{long}")
+    end
+
     # Parse the 'current_observation' field of the wunderground response JSON
     def parse_observation_hash(observation)
       time = Time
@@ -36,7 +40,7 @@ module Ozorotter::Dal
         long: display_location['longitude']
       )
 
-      puts "Visiting #{location.name}..." if @logging_enabled
+      puts "Wunderground: Visiting #{location.name}..." if @logging_enabled
 
       temperature = Ozorotter::Temperature.new(observation['temp_c'])
 
@@ -55,8 +59,8 @@ module Ozorotter::Dal
     end
 
     private
-    def get_api_url(location_id)
-      "http://api.wunderground.com/api/#{@api_key}/conditions/q/#{location_id}.json"
+    def get_api_url(query)
+      "http://api.wunderground.com/api/#{@api_key}/conditions/q/#{URI.escape(query)}.json"
     end
 
     def get_json(url)

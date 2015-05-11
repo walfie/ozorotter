@@ -6,7 +6,7 @@ module Ozorotter
   class Weather
     include ObjectFromHash
 
-    attr_reader :description, :icon, :humidity, :location, :temperature, :time
+    attr_accessor :description, :icon, :humidity, :location, :temperature, :time
 
     def initialize(opts={})
       defaults = {
@@ -43,12 +43,21 @@ module Ozorotter
         case description.downcase
         when /rain|drizzle|shower/ then 'rain'
         when /snow|ice|hail/ then 'snow'
-        when /thunderstorm/ then 'storm'
+        when /thunderstorm|hurricane/ then 'storm'
         when /cloud|overcast/ then 'cloudy'
-        when /clear/ then 'clear'
+        when /clear|fair/ then 'clear'
         when /mist|fog|haze|smoke|ash|dust|sand|spray/ then 'fog'
         else description.downcase
         end
+    end
+
+    def to_s
+      [
+        location.name,
+        "#{temperature.to_s}",
+        "Humidity: #{humidity}",
+        description
+      ].join("\n")
     end
   end
 end
