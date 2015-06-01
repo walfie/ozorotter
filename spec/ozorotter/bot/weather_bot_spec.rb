@@ -9,6 +9,7 @@ RSpec.describe Ozorotter::Bot::WeatherBot do
       { given: "nyc WeaTHer", expect: 'nyc' },
       { given: "New York weather", expect: 'new york' },
 
+      { given: "weather, Newark, New Jersey", expect: 'newark, new jersey' }, # Comma
       { given: "weather New York, US", expect: 'new york, us' },
       { given: "weather New York", expect: 'new york' },
       { given: "weather for New York", expect: 'new york' },
