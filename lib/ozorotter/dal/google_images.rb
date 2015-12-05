@@ -1,11 +1,14 @@
 require 'ozorotter/photo'
 
-require 'google-search'
+require 'google/apis/customsearch_v1'
 
 module Ozorotter::Dal
   class GoogleImages
-    def initialize(logging_enabled=true)
+    def initialize(api_key, cx, logging_enabled=true)
       @logging_enabled = logging_enabled
+      @search = Google::Apis::CustomsearchV1::CustomsearchService.new
+      @search.key = api_key
+      @cx = cx
     end
 
     def adjust_terms(search_term)
@@ -30,28 +33,30 @@ module Ozorotter::Dal
     end
 
     def search_query(query, tries_remaining=3)
-      search_settings = {
-        query: query,
-        safe: 'active',
-        image_size: :large,
-        file_type: :jpg
-      }
-      results = Google::Search::Image.new(search_settings).to_a
+      results = @search.list_cses(
+        query,
+        cx: @cx,
+        search_type: 'image',
+        img_size: 'large',
+        file_type: 'jpg',
+        safe: 'medium'
+      ).items
+
       results.reject! do |r| # TODO: Put in conf
-        r.uri.include?('getty') || r.context_uri.include?('getty')
+        r.image.context_link.include?('getty') || r.link.include?('getty')
       end
       puts "Searching Google: #{query} (#{results.length})" if @logging_enabled
 
       return nil if results.empty?
 
-      image = results.sample
-      uri = results.sample.uri
+      result = results.sample
+      uri = result.link
       puts uri if @logging_enabled
 
       return Ozorotter::Photo.new(
         source: 'google',
-        image_url: image.uri,
-        page_url: image.context_uri
+        image_url: result.link,
+        page_url: result.image.context_link
       )
     rescue Exception => e
       STDERR.puts "Failed: #{e.inspect}"

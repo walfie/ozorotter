@@ -4,7 +4,7 @@ RSpec.describe Ozorotter::Dal::GoogleImages do
   GoogleImages = Ozorotter::Dal::GoogleImages
 
   describe '#adjust_terms' do
-    subject(:google) { GoogleImages.new }
+    subject(:google) { GoogleImages.new('some_api_key', 'some_cx') }
 
     it 'excludes sensitive search terms' do
       adjusted = google.adjust_terms('whatever')

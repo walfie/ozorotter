@@ -13,7 +13,7 @@ config = YAML.load_file('config.yml')
 
 flickr_keys = { api_key: ENV['FLICKR_KEY'], shared_secret: ENV['FLICKR_SECRET'] }
 flickr = Ozorotter::Dal::Flickr.build(flickr_keys, config['flickr'])
-google = Ozorotter::Dal::GoogleImages.new
+google = Ozorotter::Dal::GoogleImages.new(ENV['GOOGLE_API_KEY'], ENV['GOOGLE_CUSTOM_SEARCH_CX'])
 
 # Use Yahoo weather, with OpenWeatherMap as a fallback
 yahoo_weather = Ozorotter::Dal::YahooWeather.new
