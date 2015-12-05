@@ -1,6 +1,7 @@
 require 'ozorotter/photo'
 
 require 'google/apis/customsearch_v1'
+require 'active_support/core_ext/kernel/reporting' # silence_warnings
 
 module Ozorotter::Dal
   class GoogleImages
@@ -29,7 +30,9 @@ module Ozorotter::Dal
       base_query = "#{adjust_terms(weather.category)} #{weather.time_of_day}"
       query_with_location = "#{weather.location.name} #{base_query}"
 
-      search_query(query_with_location, n_tries) || search_query(base_query, n_tries)
+      silence_warnings do
+        search_query(query_with_location, n_tries) || search_query(base_query, n_tries)
+      end
     end
 
     def search_query(query, tries_remaining=3)
